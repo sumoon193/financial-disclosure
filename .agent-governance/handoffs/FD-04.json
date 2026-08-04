@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-04-module",
   "base_sha": "d97d0a2d80dffc946b3b325428f42fb6968a006c",
   "commit_sha": "51b54ea5afc77aac40cb50bc3e8de240fa82e009",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/formulas/__init__.py",
     "app/financial_disclosure/formulas/errors.py",
