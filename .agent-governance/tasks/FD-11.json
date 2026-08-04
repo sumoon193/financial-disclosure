@@ -1,6 +1,6 @@
 {
   "base_ref": "main",
-  "base_sha": "14b6dc8670c443baa0760b3ce81779baf333ba93",
+  "base_sha": "4cee23cdfbf4a33e2dc7057684b46b7fb9e2daf0",
   "behavior": {
     "failure_modes": [
       "输入非法时稳定失败",
