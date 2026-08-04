@@ -1,0 +1,65 @@
+{
+  "task_id": "FD-11",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-11-module",
+  "base_sha": "4cee23cdfbf4a33e2dc7057684b46b7fb9e2daf0",
+  "commit_sha": "ec5dd3d3f958422ae0ba00588d96a59c4f6909ee",
+  "status": "committed",
+  "changed_files": [
+    "app/financial_disclosure/eval/__init__.py",
+    "app/financial_disclosure/eval/citation_anchor.py",
+    "app/financial_disclosure/eval/errors.py",
+    "app/financial_disclosure/eval/types.py",
+    "tests/financial_disclosure/eval/__init__.py",
+    "tests/financial_disclosure/eval/test_fd_11.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/eval/__init__.py",
+    "app/financial_disclosure/eval/citation_anchor.py",
+    "app/financial_disclosure/eval/errors.py",
+    "app/financial_disclosure/eval/types.py",
+    "tests/financial_disclosure/eval/__init__.py",
+    "tests/financial_disclosure/eval/test_fd_11.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/eval/test_fd_11.py -q",
+    "exit_code": 1,
+    "passed": 1,
+    "failed": 10,
+    "reason": "合同入口行为尚未实现（CitationAnchor.execute 抛 NotImplementedError）；通过项为冻结集不可变测试"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/eval/test_fd_11.py -q",
+    "exit_code": 0,
+    "passed": 11,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 92,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools migrations -> exit 0",
+    "scope_limits": "6 changed files / 337 lines，未超 max_changed_files=8 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实模型试验（network=disabled，评测基于固定 RunResult fixture）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "真实模型/检索系统上的收益数字（未执行真实试验；FD-12 接管真实演练与审计）"
+  ],
+  "known_risks": [
+    "评测为冻结集上的确定性打分（capabilities.database_changes=false）；数值/citation/检索收益尚未在真实系统上复现"
+  ],
+  "follow_up": [
+    "FD-12 依赖 FD-11：完整演练、发布与真实性审计"
+  ]
+}
