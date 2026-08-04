@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-10-module",
   "base_sha": "afdb2a731c18244b742e5765abd1675318ffcb08",
   "commit_sha": "667c8a61c7e22dd44b7170c9c7807200ac2dd099",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/observability/__init__.py",
     "app/financial_disclosure/observability/tracer.py",
