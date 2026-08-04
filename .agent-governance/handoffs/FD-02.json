@@ -1,0 +1,67 @@
+{
+  "task_id": "FD-02",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-02-module",
+  "base_sha": "1b988fcc06463bcf2e97d900611110876faad980",
+  "commit_sha": "fadcbd97cd74af149c4f8e83ad7baf7de1f058a5",
+  "status": "pushed",
+  "changed_files": [
+    "app/financial_disclosure/contracts/__init__.py",
+    "app/financial_disclosure/contracts/citation_anchor.py",
+    "app/financial_disclosure/contracts/errors.py",
+    "app/financial_disclosure/contracts/state.py",
+    "app/financial_disclosure/contracts/types.py",
+    "tests/financial_disclosure/contracts/__init__.py",
+    "tests/financial_disclosure/contracts/test_fd_02.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/contracts/__init__.py",
+    "app/financial_disclosure/contracts/citation_anchor.py",
+    "app/financial_disclosure/contracts/errors.py",
+    "app/financial_disclosure/contracts/state.py",
+    "app/financial_disclosure/contracts/types.py",
+    "tests/financial_disclosure/contracts/__init__.py",
+    "tests/financial_disclosure/contracts/test_fd_02.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/contracts/test_fd_02.py -q",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 10,
+    "reason": "合同入口行为尚未实现（CitationAnchor.execute / VerificationRun.advance 抛 NotImplementedError）"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/contracts/test_fd_02.py -q",
+    "exit_code": 0,
+    "passed": 10,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 13,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools -> exit 0",
+    "scope_limits": "7 changed files / 283 lines，未超 max_changed_files=8 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实 HTTP /verification-runs 服务（network=disabled，FD-02 为纯 typed 合同层）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "数据表 verification_run 的迁移（capabilities.database_changes=false，未写迁移；后续持久化模块接管）"
+  ],
+  "known_risks": [
+    "状态机为内存 typed 合同（created->evidence_ready->computed->reviewed->completed），无数据库持久化；非法转换以 typed 错误稳定拒绝，符合本模块边界"
+  ],
+  "follow_up": [
+    "FD-03 依赖 FD-02：SEC、XBRL 与 HTML 摄取"
+  ]
+}
