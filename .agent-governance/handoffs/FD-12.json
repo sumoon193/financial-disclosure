@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-12-module",
   "base_sha": "6a9015a2bebff33fe1ec683c08c96081d9674a77",
   "commit_sha": "6da8c2d11cbff05af84f30e57fc784b54cade965",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "docs/financial_disclosure/release/README.md",
     "scripts/financial_disclosure/release_drill.py",
