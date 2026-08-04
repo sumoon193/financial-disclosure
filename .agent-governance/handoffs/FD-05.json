@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-05-module",
   "base_sha": "b99334222bd1ddf4196376608ffa583b58de3368",
   "commit_sha": "9ee445d6fef5b75d8fc77db7a3dcd935ce19e88c",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/model/__init__.py",
     "app/financial_disclosure/model/adapter.py",
