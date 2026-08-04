@@ -1,0 +1,71 @@
+{
+  "task_id": "FD-05",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-05-module",
+  "base_sha": "b99334222bd1ddf4196376608ffa583b58de3368",
+  "commit_sha": "9ee445d6fef5b75d8fc77db7a3dcd935ce19e88c",
+  "status": "pushed",
+  "changed_files": [
+    "app/financial_disclosure/model/__init__.py",
+    "app/financial_disclosure/model/adapter.py",
+    "app/financial_disclosure/retrieval/__init__.py",
+    "app/financial_disclosure/retrieval/citation_anchor.py",
+    "app/financial_disclosure/retrieval/errors.py",
+    "app/financial_disclosure/retrieval/retriever.py",
+    "app/financial_disclosure/retrieval/types.py",
+    "tests/financial_disclosure/retrieval/__init__.py",
+    "tests/financial_disclosure/retrieval/test_fd_05.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/model/__init__.py",
+    "app/financial_disclosure/model/adapter.py",
+    "app/financial_disclosure/retrieval/__init__.py",
+    "app/financial_disclosure/retrieval/citation_anchor.py",
+    "app/financial_disclosure/retrieval/errors.py",
+    "app/financial_disclosure/retrieval/retriever.py",
+    "app/financial_disclosure/retrieval/types.py",
+    "tests/financial_disclosure/retrieval/__init__.py",
+    "tests/financial_disclosure/retrieval/test_fd_05.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/retrieval/test_fd_05.py -q",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 8,
+    "reason": "合同入口行为尚未实现（Retriever.retrieve / CitationAnchor.execute 抛 NotImplementedError）"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/retrieval/test_fd_05.py -q",
+    "exit_code": 0,
+    "passed": 8,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 39,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools -> exit 0",
+    "scope_limits": "9 changed files / 320 lines，未超 max_changed_files=12 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实模型/向量检索（network=disabled，ModelAdapter 为确定性 Fake）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "真实外部检索来源与真实模型输出（未执行；FD-11/FD-12 真实试验与审计接管）"
+  ],
+  "known_risks": [
+    "三路检索为内存语料（capabilities.database_changes=false）；ModelAdapter 是确定性 Fake，非真实 LLM 输出，未验证外部服务不得视为真实模型试验结果"
+  ],
+  "follow_up": [
+    "FD-06 依赖 FD-05：只读核验链路"
+  ]
+}
