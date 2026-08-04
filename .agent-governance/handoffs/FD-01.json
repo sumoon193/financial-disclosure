@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-01-module",
   "base_sha": "840915ba6fd5f954c70464d0dc10ccc7069d4ad4",
   "commit_sha": "c7f1cd534639a62432804b1f04b9c3c133994399",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "docs/audit/README.md",
     "docs/audit/sample-baseline.json",
