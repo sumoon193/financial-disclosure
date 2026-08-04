@@ -1,0 +1,69 @@
+{
+  "task_id": "FD-08",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-08-module",
+  "base_sha": "cecd1fee417ec630a1bc89867f372e9b9c1e1fdd",
+  "commit_sha": "fd4d26be35052dc3b55f76d11c291448ee22ac04",
+  "status": "committed",
+  "changed_files": [
+    "app/financial_disclosure/persistence/__init__.py",
+    "app/financial_disclosure/persistence/citation_anchor.py",
+    "app/financial_disclosure/persistence/errors.py",
+    "app/financial_disclosure/persistence/store.py",
+    "app/financial_disclosure/persistence/types.py",
+    "migrations/financial_disclosure/001_persistence.sql",
+    "tests/financial_disclosure/persistence/__init__.py",
+    "tests/financial_disclosure/persistence/test_fd_08.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/persistence/__init__.py",
+    "app/financial_disclosure/persistence/citation_anchor.py",
+    "app/financial_disclosure/persistence/errors.py",
+    "app/financial_disclosure/persistence/store.py",
+    "app/financial_disclosure/persistence/types.py",
+    "migrations/financial_disclosure/001_persistence.sql",
+    "tests/financial_disclosure/persistence/__init__.py",
+    "tests/financial_disclosure/persistence/test_fd_08.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/persistence/test_fd_08.py -q",
+    "exit_code": 1,
+    "passed": 1,
+    "failed": 8,
+    "reason": "合同入口行为尚未实现（CitationAnchor.execute 抛 NotImplementedError）；通过项为迁移声明测试"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/persistence/test_fd_08.py -q",
+    "exit_code": 0,
+    "passed": 9,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 64,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools migrations -> exit 0",
+    "scope_limits": "8 changed files / 468 lines，未超 max_changed_files=12 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实分布式租约/缓存中间件（sqlite3 内存存储，network=disabled）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "真实生产数据库部署与崩溃点演练（未执行；FD-09/FD-12 接管迁移与回滚演练）"
+  ],
+  "known_risks": [
+    "持久化为 sqlite3 内存实现（数据库变更能力已启用，但未对接真实持久介质/中间件）；迁移 SQL 为 schema 声明，尚未接迁移运行器"
+  ],
+  "follow_up": [
+    "FD-09 依赖 FD-08：迁移、回滚与对象生命周期"
+  ]
+}
