@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-08-module",
   "base_sha": "cecd1fee417ec630a1bc89867f372e9b9c1e1fdd",
   "commit_sha": "fd4d26be35052dc3b55f76d11c291448ee22ac04",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/persistence/__init__.py",
     "app/financial_disclosure/persistence/citation_anchor.py",
