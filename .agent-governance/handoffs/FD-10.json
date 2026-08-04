@@ -1,0 +1,71 @@
+{
+  "task_id": "FD-10",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-10-module",
+  "base_sha": "afdb2a731c18244b742e5765abd1675318ffcb08",
+  "commit_sha": "667c8a61c7e22dd44b7170c9c7807200ac2dd099",
+  "status": "pushed",
+  "changed_files": [
+    "app/financial_disclosure/observability/__init__.py",
+    "app/financial_disclosure/observability/tracer.py",
+    "app/financial_disclosure/security/__init__.py",
+    "app/financial_disclosure/security/access_control.py",
+    "app/financial_disclosure/security/errors.py",
+    "app/financial_disclosure/security/filing_identity.py",
+    "app/financial_disclosure/security/types.py",
+    "tests/financial_disclosure/security/__init__.py",
+    "tests/financial_disclosure/security/test_fd_10.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/observability/__init__.py",
+    "app/financial_disclosure/observability/tracer.py",
+    "app/financial_disclosure/security/__init__.py",
+    "app/financial_disclosure/security/access_control.py",
+    "app/financial_disclosure/security/errors.py",
+    "app/financial_disclosure/security/filing_identity.py",
+    "app/financial_disclosure/security/types.py",
+    "tests/financial_disclosure/security/__init__.py",
+    "tests/financial_disclosure/security/test_fd_10.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/security/test_fd_10.py -q",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 8,
+    "reason": "合同入口行为尚未实现（FilingIdentity.execute 抛 NotImplementedError）"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/security/test_fd_10.py -q",
+    "exit_code": 0,
+    "passed": 8,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 81,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools migrations -> exit 0",
+    "scope_limits": "9 changed files / 299 lines，未超 max_changed_files=12 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实 OTel 采集器与外部权限服务（network=disabled，Tracer 为本地脱敏实现）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "真实 OTel 导出与权限目录来源（未执行；FD-12 真实演练与审计接管）"
+  ],
+  "known_risks": [
+    "权限为内存 ACL（capabilities.database_changes=false）；Tracer 为本地脱敏实现，未对接真实 OTel exporter"
+  ],
+  "follow_up": [
+    "FD-11 依赖 FD-10：冻结评测、检索消融与真实模型试验"
+  ]
+}
