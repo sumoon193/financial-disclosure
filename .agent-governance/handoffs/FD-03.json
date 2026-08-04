@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-03-module",
   "base_sha": "51c381abbde440544c325168e7b5a60c138e9cb0",
   "commit_sha": "bc021e1e7cdaea34bf25854e6abbc458bd2ccb1d",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/ingestion/__init__.py",
     "app/financial_disclosure/ingestion/errors.py",
