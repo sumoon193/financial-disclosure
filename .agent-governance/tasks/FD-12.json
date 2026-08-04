@@ -98,11 +98,11 @@
   "tdd": {
     "expected_red_exit_code": 1,
     "expected_red_reason": "完整演练、发布与真实性审计目标行为或入口尚未实现",
-    "green_command": "python -m pytest tests/financial_disclosure/fd_12 -q",
+    "green_command": "python -m pytest tests/financial_disclosure/release/test_fd_12.py -q",
     "implementation_boundary": "只实现使“来源中断、解析失败和回滚有真实演练记录”成立的最小代码，不扩展相邻模块",
-    "red_command": "python -m pytest tests/financial_disclosure/fd_12 -q",
+    "red_command": "python -m pytest tests/financial_disclosure/release/test_fd_12.py -q",
     "red_test_files": [
-      "tests/financial_disclosure/fd_12"
+      "tests/financial_disclosure/release/test_fd_12.py"
     ],
     "regression_commands": [
       "python -m pytest tests/financial_disclosure -q"

@@ -96,11 +96,11 @@
   "tdd": {
     "expected_red_exit_code": 1,
     "expected_red_reason": "Typed API、状态与错误合同目标行为或入口尚未实现",
-    "green_command": "python -m pytest tests/financial_disclosure/fd_02 -q",
+    "green_command": "python -m pytest tests/financial_disclosure/contracts/test_fd_02.py -q",
     "implementation_boundary": "只实现使“Filing/Verification API 使用固定 typed output”成立的最小代码，不扩展相邻模块",
-    "red_command": "python -m pytest tests/financial_disclosure/fd_02 -q",
+    "red_command": "python -m pytest tests/financial_disclosure/contracts/test_fd_02.py -q",
     "red_test_files": [
-      "tests/financial_disclosure/fd_02"
+      "tests/financial_disclosure/contracts/test_fd_02.py"
     ],
     "regression_commands": [
       "python -m pytest tests/financial_disclosure -q"

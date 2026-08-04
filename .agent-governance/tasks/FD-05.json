@@ -98,11 +98,11 @@
   "tdd": {
     "expected_red_exit_code": 1,
     "expected_red_reason": "三路检索与模型 adapter目标行为或入口尚未实现",
-    "green_command": "python -m pytest tests/financial_disclosure/fd_05 -q",
+    "green_command": "python -m pytest tests/financial_disclosure/retrieval/test_fd_05.py -q",
     "implementation_boundary": "只实现使“检索返回版本 citation且模型只解释已计算事实”成立的最小代码，不扩展相邻模块",
-    "red_command": "python -m pytest tests/financial_disclosure/fd_05 -q",
+    "red_command": "python -m pytest tests/financial_disclosure/retrieval/test_fd_05.py -q",
     "red_test_files": [
-      "tests/financial_disclosure/fd_05"
+      "tests/financial_disclosure/retrieval/test_fd_05.py"
     ],
     "regression_commands": [
       "python -m pytest tests/financial_disclosure -q"

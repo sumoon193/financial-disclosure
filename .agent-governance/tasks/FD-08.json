@@ -98,11 +98,11 @@
   "tdd": {
     "expected_red_exit_code": 1,
     "expected_red_reason": "持久化、幂等、租约与缓存目标行为或入口尚未实现",
-    "green_command": "python -m pytest tests/financial_disclosure/fd_08 -q",
+    "green_command": "python -m pytest tests/financial_disclosure/persistence/test_fd_08.py -q",
     "implementation_boundary": "只实现使“版本化事实、查询缓存和worker租约可恢复”成立的最小代码，不扩展相邻模块",
-    "red_command": "python -m pytest tests/financial_disclosure/fd_08 -q",
+    "red_command": "python -m pytest tests/financial_disclosure/persistence/test_fd_08.py -q",
     "red_test_files": [
-      "tests/financial_disclosure/fd_08"
+      "tests/financial_disclosure/persistence/test_fd_08.py"
     ],
     "regression_commands": [
       "python -m pytest tests/financial_disclosure -q"

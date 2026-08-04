@@ -98,11 +98,11 @@
   "tdd": {
     "expected_red_exit_code": 1,
     "expected_red_reason": "OTel、安全与权限目标行为或入口尚未实现",
-    "green_command": "python -m pytest tests/financial_disclosure/fd_10 -q",
+    "green_command": "python -m pytest tests/financial_disclosure/security/test_fd_10.py -q",
     "implementation_boundary": "只实现使“来源、检索、核验和review具有脱敏Trace和权限隔离”成立的最小代码，不扩展相邻模块",
-    "red_command": "python -m pytest tests/financial_disclosure/fd_10 -q",
+    "red_command": "python -m pytest tests/financial_disclosure/security/test_fd_10.py -q",
     "red_test_files": [
-      "tests/financial_disclosure/fd_10"
+      "tests/financial_disclosure/security/test_fd_10.py"
     ],
     "regression_commands": [
       "python -m pytest tests/financial_disclosure -q"

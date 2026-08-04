@@ -96,11 +96,11 @@
   "tdd": {
     "expected_red_exit_code": 1,
     "expected_red_reason": "迁移、回滚与对象生命周期目标行为或入口尚未实现",
-    "green_command": "python -m pytest tests/financial_disclosure/fd_09 -q",
+    "green_command": "python -m pytest tests/financial_disclosure/lifecycle/test_fd_09.py -q",
     "implementation_boundary": "只实现使“active版本切换可回滚且旧审计事实保留”成立的最小代码，不扩展相邻模块",
-    "red_command": "python -m pytest tests/financial_disclosure/fd_09 -q",
+    "red_command": "python -m pytest tests/financial_disclosure/lifecycle/test_fd_09.py -q",
     "red_test_files": [
-      "tests/financial_disclosure/fd_09"
+      "tests/financial_disclosure/lifecycle/test_fd_09.py"
     ],
     "regression_commands": [
       "python -m pytest tests/financial_disclosure -q"
