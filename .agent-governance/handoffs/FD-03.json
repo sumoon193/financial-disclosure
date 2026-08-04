@@ -1,0 +1,65 @@
+{
+  "task_id": "FD-03",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-03-module",
+  "base_sha": "51c381abbde440544c325168e7b5a60c138e9cb0",
+  "commit_sha": "bc021e1e7cdaea34bf25854e6abbc458bd2ccb1d",
+  "status": "committed",
+  "changed_files": [
+    "app/financial_disclosure/ingestion/__init__.py",
+    "app/financial_disclosure/ingestion/errors.py",
+    "app/financial_disclosure/ingestion/types.py",
+    "app/financial_disclosure/ingestion/verification_result.py",
+    "tests/financial_disclosure/ingestion/__init__.py",
+    "tests/financial_disclosure/ingestion/test_fd_03.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/ingestion/__init__.py",
+    "app/financial_disclosure/ingestion/errors.py",
+    "app/financial_disclosure/ingestion/types.py",
+    "app/financial_disclosure/ingestion/verification_result.py",
+    "tests/financial_disclosure/ingestion/__init__.py",
+    "tests/financial_disclosure/ingestion/test_fd_03.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/ingestion/test_fd_03.py -q",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 8,
+    "reason": "合同入口行为尚未实现（VerificationResult.execute 抛 NotImplementedError）"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/ingestion/test_fd_03.py -q",
+    "exit_code": 0,
+    "passed": 8,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 21,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools -> exit 0",
+    "scope_limits": "6 changed files / 286 lines，未超 max_changed_files=8 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实 SEC/XBRL/HTML 抓取（network=disabled，内容为固定 Fake fixture）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "真实外部来源抓取证据（未执行；FD-12 真实演练与审计接管）"
+  ],
+  "known_risks": [
+    "摄取为内存态幂等存储（capabilities.database_changes=false，无 document_version 表迁移）；持久化模块接管前重启即失"
+  ],
+  "follow_up": [
+    "FD-04 依赖 FD-03：规范化与 Decimal 公式血缘"
+  ]
+}
