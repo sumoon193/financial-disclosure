@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-09-module",
   "base_sha": "22c7b0784585313211f4731f10882d8445cb285a",
   "commit_sha": "cdcd0c3df36cbfb77fedea96656bd997ff43a2f3",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/lifecycle/__init__.py",
     "app/financial_disclosure/lifecycle/errors.py",
