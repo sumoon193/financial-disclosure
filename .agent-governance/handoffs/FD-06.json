@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-06-module",
   "base_sha": "0a33446efb993af2fe9727565a86644cbb24c2d8",
   "commit_sha": "bac73bfb42962cbb31e7d93db1218d84a873bcda",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/verification/__init__.py",
     "app/financial_disclosure/verification/errors.py",
