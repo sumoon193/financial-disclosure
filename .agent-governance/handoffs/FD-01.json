@@ -1,0 +1,63 @@
+{
+  "task_id": "FD-01",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-01-module",
+  "base_sha": "840915ba6fd5f954c70464d0dc10ccc7069d4ad4",
+  "commit_sha": "c7f1cd534639a62432804b1f04b9c3c133994399",
+  "status": "committed",
+  "changed_files": [
+    "docs/audit/README.md",
+    "docs/audit/sample-baseline.json",
+    "tests/financial_disclosure/audit/__init__.py",
+    "tests/financial_disclosure/audit/contracts.py",
+    "tests/financial_disclosure/audit/test_fd_01.py"
+  ],
+  "created_files": [
+    "docs/audit/README.md",
+    "docs/audit/sample-baseline.json",
+    "tests/financial_disclosure/audit/__init__.py",
+    "tests/financial_disclosure/audit/contracts.py",
+    "tests/financial_disclosure/audit/test_fd_01.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/audit/test_fd_01.py -q",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 3,
+    "reason": "合同入口行为尚未实现（FilingIdentity.execute 抛 NotImplementedError）；公开样例基线 docs/audit/sample-baseline.json 缺失"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/audit/test_fd_01.py -q",
+    "exit_code": 0,
+    "passed": 3,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 3,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools -> exit 0（scripts/ 尚未创建，属预期）",
+    "scope_limits": "5 changed files / 151 lines，未超 max_changed_files=8 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "python -m compileall 中的 scripts 目录（FD-01 尚无该目录）"
+  ],
+  "unverified": [
+    "SEC EDGAR accession 级端到端抓取证据（离线环境，未执行；按实施计划留给 FD-12 真实演练与审计）",
+    "远程分支保护（manifest remote_protection=unverified）"
+  ],
+  "known_risks": [
+    "公开样例基线中的 sample_id 使用 SEC EDGAR 公开 CIK 作为来源标识，属合同基线记录；accession 级抓取证据未验证，不得视为已核验事实"
+  ],
+  "follow_up": [
+    "FD-02 依赖 FD-01：Typed API、状态与错误合同"
+  ]
+}
