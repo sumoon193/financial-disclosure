@@ -4,7 +4,7 @@
   "branch": "codex/financial-disclosure/fd-07-module",
   "base_sha": "4b2c8b4378717330e444204180baadc3315b1ae2",
   "commit_sha": "025faec4e613dad54878574a152ea01fccda4556",
-  "status": "committed",
+  "status": "pushed",
   "changed_files": [
     "app/financial_disclosure/ocr/__init__.py",
     "app/financial_disclosure/ocr/errors.py",
