@@ -17,7 +17,7 @@
         "document_version"
       ],
       "dependencies": [],
-      "failure_test": "tests/financial_disclosure/fd_01",
+      "failure_test": "tests/financial_disclosure/audit/test_fd_01.py",
       "interface_signatures": [
         "FilingIdentity.execute(input: FD01Input) -> FD01Result"
       ],
@@ -49,7 +49,7 @@
       "dependencies": [
         "FD-01"
       ],
-      "failure_test": "tests/financial_disclosure/fd_02",
+      "failure_test": "tests/financial_disclosure/contracts/test_fd_02.py",
       "interface_signatures": [
         "CitationAnchor.execute(input: FD02Input) -> FD02Result"
       ],
@@ -81,7 +81,7 @@
       "dependencies": [
         "FD-02"
       ],
-      "failure_test": "tests/financial_disclosure/fd_03",
+      "failure_test": "tests/financial_disclosure/ingestion/test_fd_03.py",
       "interface_signatures": [
         "VerificationResult.execute(input: FD03Input) -> FD03Result"
       ],
@@ -113,7 +113,7 @@
       "dependencies": [
         "FD-03"
       ],
-      "failure_test": "tests/financial_disclosure/fd_04",
+      "failure_test": "tests/financial_disclosure/formulas/test_fd_04.py",
       "interface_signatures": [
         "FilingIdentity.execute(input: FD04Input) -> FD04Result"
       ],
@@ -146,7 +146,7 @@
       "dependencies": [
         "FD-04"
       ],
-      "failure_test": "tests/financial_disclosure/fd_05",
+      "failure_test": "tests/financial_disclosure/retrieval/test_fd_05.py",
       "interface_signatures": [
         "CitationAnchor.execute(input: FD05Input) -> FD05Result"
       ],
@@ -179,7 +179,7 @@
       "dependencies": [
         "FD-05"
       ],
-      "failure_test": "tests/financial_disclosure/fd_06",
+      "failure_test": "tests/financial_disclosure/verification/test_fd_06.py",
       "interface_signatures": [
         "VerificationResult.execute(input: FD06Input) -> FD06Result"
       ],
@@ -211,7 +211,7 @@
       "dependencies": [
         "FD-06"
       ],
-      "failure_test": "tests/financial_disclosure/fd_07",
+      "failure_test": "tests/financial_disclosure/ocr/test_fd_07.py",
       "interface_signatures": [
         "FilingIdentity.execute(input: FD07Input) -> FD07Result"
       ],
@@ -243,7 +243,7 @@
       "dependencies": [
         "FD-07"
       ],
-      "failure_test": "tests/financial_disclosure/fd_08",
+      "failure_test": "tests/financial_disclosure/persistence/test_fd_08.py",
       "interface_signatures": [
         "CitationAnchor.execute(input: FD08Input) -> FD08Result"
       ],
@@ -276,7 +276,7 @@
       "dependencies": [
         "FD-08"
       ],
-      "failure_test": "tests/financial_disclosure/fd_09",
+      "failure_test": "tests/financial_disclosure/lifecycle/test_fd_09.py",
       "interface_signatures": [
         "VerificationResult.execute(input: FD09Input) -> FD09Result"
       ],
@@ -308,7 +308,7 @@
       "dependencies": [
         "FD-09"
       ],
-      "failure_test": "tests/financial_disclosure/fd_10",
+      "failure_test": "tests/financial_disclosure/security/test_fd_10.py",
       "interface_signatures": [
         "FilingIdentity.execute(input: FD10Input) -> FD10Result"
       ],
@@ -341,7 +341,7 @@
       "dependencies": [
         "FD-10"
       ],
-      "failure_test": "tests/financial_disclosure/fd_11",
+      "failure_test": "tests/financial_disclosure/eval/test_fd_11.py",
       "interface_signatures": [
         "CitationAnchor.execute(input: FD11Input) -> FD11Result"
       ],
@@ -373,7 +373,7 @@
       "dependencies": [
         "FD-11"
       ],
-      "failure_test": "tests/financial_disclosure/fd_12",
+      "failure_test": "tests/financial_disclosure/release/test_fd_12.py",
       "interface_signatures": [
         "VerificationResult.execute(input: FD12Input) -> FD12Result"
       ],

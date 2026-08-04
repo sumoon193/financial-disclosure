@@ -39,7 +39,7 @@
 - 数据表：`document_version`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_01`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/audit/test_fd_01.py`，失败原因只能是目标行为未实现。
 - 可观察结果：每个 filing 样例具有来源、版本和许可证状态。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -52,7 +52,7 @@
 - 数据表：`verification_run`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_02`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/contracts/test_fd_02.py`，失败原因只能是目标行为未实现。
 - 可观察结果：Filing/Verification API 使用固定 typed output。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -65,7 +65,7 @@
 - 数据表：`document_version`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_03`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/ingestion/test_fd_03.py`，失败原因只能是目标行为未实现。
 - 可观察结果：重复摄取幂等且 filing identity 不混淆 amendment。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -78,7 +78,7 @@
 - 数据表：`verification_run`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_04`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/formulas/test_fd_04.py`，失败原因只能是目标行为未实现。
 - 可观察结果：数值计算保留单位、scale、rounding和输入血缘。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -91,7 +91,7 @@
 - 数据表：`document_version`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_05`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/retrieval/test_fd_05.py`，失败原因只能是目标行为未实现。
 - 可观察结果：检索返回版本 citation且模型只解释已计算事实。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -104,7 +104,7 @@
 - 数据表：`verification_run`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_06`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/verification/test_fd_06.py`，失败原因只能是目标行为未实现。
 - 可观察结果：规则核验输出 discrepancy、tolerance、provenance和citations。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -117,7 +117,7 @@
 - 数据表：`document_version`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_07`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/ocr/test_fd_07.py`，失败原因只能是目标行为未实现。
 - 可观察结果：只有通过冻结准入指标的PDF/OCR路径可启用。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -130,7 +130,7 @@
 - 数据表：`verification_run`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_08`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/persistence/test_fd_08.py`，失败原因只能是目标行为未实现。
 - 可观察结果：版本化事实、查询缓存和worker租约可恢复。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -143,7 +143,7 @@
 - 数据表：`document_version`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_09`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/lifecycle/test_fd_09.py`，失败原因只能是目标行为未实现。
 - 可观察结果：active版本切换可回滚且旧审计事实保留。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -156,7 +156,7 @@
 - 数据表：`verification_run`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_10`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/security/test_fd_10.py`，失败原因只能是目标行为未实现。
 - 可观察结果：来源、检索、核验和review具有脱敏Trace和权限隔离。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -169,7 +169,7 @@
 - 数据表：`document_version`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_11`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/eval/test_fd_11.py`，失败原因只能是目标行为未实现。
 - 可观察结果：数值、citation和检索收益由冻结集验证。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
@@ -182,7 +182,7 @@
 - 数据表：`verification_run`；迁移必须向前/向后兼容并保留审计事实。
 - API：`/verification-runs`；禁止把领域决策写入控制器。
 - 状态：`created -> evidence_ready -> computed -> reviewed -> completed`，非法转换必须稳定拒绝。
-- 失败测试：先创建/运行 `tests/financial_disclosure/fd_12`，失败原因只能是目标行为未实现。
+- 失败测试：先创建/运行 `tests/financial_disclosure/release/test_fd_12.py`，失败原因只能是目标行为未实现。
 - 可观察结果：来源中断、解析失败和回滚有真实演练记录。
 - 回归命令：`python -m pytest tests/financial_disclosure -q`。
 - 交接：记录 RED/GREEN、实际改动、未运行项、风险、commit SHA；禁止 merge 和 force-push。
