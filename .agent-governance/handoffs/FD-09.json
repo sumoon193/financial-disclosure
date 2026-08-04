@@ -1,0 +1,67 @@
+{
+  "task_id": "FD-09",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/fd-09-module",
+  "base_sha": "22c7b0784585313211f4731f10882d8445cb285a",
+  "commit_sha": "cdcd0c3df36cbfb77fedea96656bd997ff43a2f3",
+  "status": "pushed",
+  "changed_files": [
+    "app/financial_disclosure/lifecycle/__init__.py",
+    "app/financial_disclosure/lifecycle/errors.py",
+    "app/financial_disclosure/lifecycle/lifecycle.py",
+    "app/financial_disclosure/lifecycle/types.py",
+    "app/financial_disclosure/lifecycle/verification_result.py",
+    "tests/financial_disclosure/lifecycle/__init__.py",
+    "tests/financial_disclosure/lifecycle/test_fd_09.py"
+  ],
+  "created_files": [
+    "app/financial_disclosure/lifecycle/__init__.py",
+    "app/financial_disclosure/lifecycle/errors.py",
+    "app/financial_disclosure/lifecycle/lifecycle.py",
+    "app/financial_disclosure/lifecycle/types.py",
+    "app/financial_disclosure/lifecycle/verification_result.py",
+    "tests/financial_disclosure/lifecycle/__init__.py",
+    "tests/financial_disclosure/lifecycle/test_fd_09.py"
+  ],
+  "deleted_files": [],
+  "scope_deviations": [],
+  "red": {
+    "command": "python -m pytest tests/financial_disclosure/lifecycle/test_fd_09.py -q",
+    "exit_code": 1,
+    "passed": 0,
+    "failed": 9,
+    "reason": "合同入口行为尚未实现（VerificationResult.execute 抛 NotImplementedError）"
+  },
+  "green": {
+    "command": "python -m pytest tests/financial_disclosure/lifecycle/test_fd_09.py -q",
+    "exit_code": 0,
+    "passed": 9,
+    "failed": 0
+  },
+  "regression": {
+    "command": "python -m pytest tests/financial_disclosure -q",
+    "exit_code": 0,
+    "passed": 73,
+    "failed": 0
+  },
+  "inspection": {
+    "gates": "status, manifest, task-packet, branch-policy, scope, test-integrity, secrets, focused-tests, regression 全部 passed",
+    "contract_tests": "python -m pytest tests/governance -q -> 2 passed",
+    "build": "python -m compileall -q app tests tools migrations -> exit 0",
+    "scope_limits": "7 changed files / 358 lines，未超 max_changed_files=8 / max_diff_lines=800"
+  },
+  "not_run": [
+    "GitHub Actions 远程 CI（本次仅在本地执行全部门禁）",
+    "真实数据库迁移运行器与崩溃点回滚演练（内存对象生命周期，network=disabled）"
+  ],
+  "unverified": [
+    "远程分支保护（manifest remote_protection=unverified）",
+    "真实迁移/回滚演练记录（未执行；FD-12 接管真实演练与审计）"
+  ],
+  "known_risks": [
+    "生命周期为内存对象（capabilities.database_changes=true 已启用，但未对接真实持久介质）；回滚语义为历史栈回退，未做崩溃点恢复测试"
+  ],
+  "follow_up": [
+    "FD-10 依赖 FD-09：OTel、安全与权限"
+  ]
+}
