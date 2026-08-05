@@ -37,3 +37,11 @@ def test_package_declares_api_runtime_dependencies() -> None:
     assert any(dependency.startswith("pydantic") for dependency in dependencies)
     assert any(dependency.startswith("httpx") for dependency in dependencies)
     assert any(dependency.startswith("pillow") for dependency in dependencies)
+
+
+def test_offline_ocr_contract_asserts_blocked_without_binary() -> None:
+    source = (
+        ROOT / "tests" / "financial_disclosure" / "test_live_smoke.py"
+    ).read_text(encoding="utf-8")
+
+    assert "test_ocr_smoke_is_blocked_without_local_binary" in source

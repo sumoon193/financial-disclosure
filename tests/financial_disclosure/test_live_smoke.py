@@ -20,11 +20,12 @@ def test_model_smoke_is_blocked_without_real_credentials(monkeypatch):
     assert module.main(["--component", "model"]) == 2
 
 
-def test_ocr_smoke_generates_a_local_fixture_without_user_document(monkeypatch):
+def test_ocr_smoke_is_blocked_without_local_binary(monkeypatch):
     module = _module()
     monkeypatch.delenv("FINANCIAL_DISCLOSURE_OCR_SAMPLE", raising=False)
+    monkeypatch.setattr(module, "_ocr_binary", lambda: "missing-tesseract-binary")
 
-    assert module.main(["--component", "ocr"]) == 0
+    assert module.main(["--component", "ocr"]) == 2
 
 
 def test_ocr_binary_uses_explicit_nonsecret_override(monkeypatch):
