@@ -1,0 +1,20 @@
+{
+  "task_id": "INTEGRATION",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/quality-sweep",
+  "base_ref": "main",
+  "base_sha": "3b3c46f41b33a33e0ec262ec277ab8d207cc6163",
+  "dependencies": ["FD-12"],
+  "priority": "high",
+  "owner_model": "primary-integrator",
+  "reviewer": "primary-integrator",
+  "goal": "Integrate typed API, durable persistence, real source/model adapters, and explicit live validation.",
+  "max_changed_files": 1000,
+  "max_diff_lines": 100000,
+  "scope": {"allowed_paths": ["app/**", "tests/**", "scripts/**", "docs/**", "migrations/**", "pyproject.toml"], "allowed_create_paths": ["app/**", "tests/**", "scripts/**", "docs/**", "migrations/**"], "allowed_delete_paths": [], "read_only_paths": ["AGENTS.md", ".agent-governance/**", "LICENSE"], "read_denylist": [".env", "data/private/**", "storage/raw-restricted/**"], "write_denylist": [".env", "data/private/**", "storage/raw-restricted/**"]},
+  "behavior": {"observable_result": "Financial Disclosure API and persistence are durable and real-service results remain explicit.", "failure_modes": ["invalid filing", "source unavailable", "persistence conflict"], "non_goals": ["merge or force-push", "secret material", "learning documents"]},
+  "capabilities": {"approval_flow_changes": false, "database_changes": true, "dependency_changes": false, "docker": "disabled", "external_services": ["sec", "ocr", "model", "otel"], "network": "live-smoke-only", "public_api_changes": true, "runtime_kernel_changes": false},
+  "delivery": {"commit_required": true, "merge_allowed": false, "force_push_allowed": false, "push_allowed": true, "handoff_file": ".agent-governance/handoffs/INTEGRATION.json"},
+  "security": {"secret_policy": "no-secret-content", "read_denylist": [".env", "data/private/**", "storage/raw-restricted/**"], "write_denylist": [".env", "data/private/**", "storage/raw-restricted/**"]},
+  "tdd": {"red_command": "python -m pytest tests/financial_disclosure/test_api_and_persistence.py -q", "red_test_files": ["tests/financial_disclosure/test_api_and_persistence.py"], "expected_red_reason": "typed API and durable persistence contract were incomplete", "green_command": "python -m pytest tests -q", "regression_commands": ["python -m compileall -q app"]}
+}
