@@ -10,7 +10,7 @@
   },
   "green": {
     "command": "python -m pytest -q",
-    "result": "129 passed, 1 dependency warning"
+    "result": "130 passed, 1 dependency warning"
   },
   "regression": {
     "command": "python -m ruff check app tests scripts && python -m mypy app/financial_disclosure",
