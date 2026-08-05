@@ -17,7 +17,7 @@ _APP = Path(__file__).resolve().parents[3] / "app"
 if str(_APP) not in sys.path:
     sys.path.insert(0, str(_APP))
 
-from financial_disclosure.ocr import (  # noqa: E402
+from financial_disclosure.ocr import (
     FD07Input,
     FD07Result,
     FilingIdentity,
@@ -130,7 +130,7 @@ def test_local_tesseract_uses_tsv_confidence_and_marks_low_quality_for_review(
 
     assert result.status is OCRQualityStatus.NEEDS_REVIEW
     assert result.metrics.accuracy == Decimal("0.55")
-    assert result.metrics.coverage == Decimal("1")
+    assert result.metrics.coverage == Decimal(1)
     assert result.engine == "tesseract"
     assert result.engine_version == "5.5.0"
     assert result.languages == ("chi_sim", "eng")
@@ -183,7 +183,7 @@ def test_local_tesseract_renders_each_pdf_page_before_quality_gating(tmp_path: P
     assert result.status is OCRQualityStatus.PASSED
     assert result.text == "Revenue 2025"
     assert result.metrics.accuracy == Decimal("0.95")
-    assert result.metrics.coverage == Decimal("1")
+    assert result.metrics.coverage == Decimal(1)
 
 
 def test_pdf_path_keeps_tesseract_binary_block_reason_after_rendering(tmp_path: Path):

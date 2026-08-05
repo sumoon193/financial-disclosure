@@ -22,8 +22,8 @@ class FilingIdentity:
             )
         accuracy = input.metrics.accuracy
         coverage = input.metrics.coverage
-        if not (Decimal("0") <= accuracy <= Decimal("1")) or not (
-            Decimal("0") <= coverage <= Decimal("1")
+        if not (Decimal(0) <= accuracy <= Decimal(1)) or not (
+            Decimal(0) <= coverage <= Decimal(1)
         ):
             return self._error(
                 input,

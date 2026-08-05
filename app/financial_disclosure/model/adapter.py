@@ -52,11 +52,19 @@ class RealModelAdapter:
         base_url: str | None = None,
         timeout_seconds: float = 30.0,
     ) -> None:
-        self._api_key = (api_key or os.getenv("QWEN_API_KEY", "")).strip()
-        self._model = model or os.getenv("QWEN_CHAT_MODEL", "")
-        self._base_url = (base_url or os.getenv(
-            "QWEN_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"
-        )).rstrip("/")
+        api_key_value = api_key if api_key is not None else os.environ.get("QWEN_API_KEY", "")
+        model_value = model if model is not None else os.environ.get("QWEN_CHAT_MODEL", "")
+        base_url_value = (
+            base_url
+            if base_url is not None
+            else os.environ.get(
+                "QWEN_BASE_URL",
+                "https://dashscope.aliyuncs.com/compatible-mode/v1",
+            )
+        )
+        self._api_key = api_key_value.strip()
+        self._model = model_value.strip()
+        self._base_url = base_url_value.rstrip("/")
         self._timeout = timeout_seconds
         if not self._api_key or not self._model:
             raise ModelUnavailableError("QWEN_API_KEY and QWEN_CHAT_MODEL are required")

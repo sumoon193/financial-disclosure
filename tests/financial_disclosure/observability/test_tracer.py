@@ -16,8 +16,8 @@ _APP = Path(__file__).resolve().parents[3] / "app"
 if str(_APP) not in sys.path:
     sys.path.insert(0, str(_APP))
 
-from financial_disclosure.observability import Tracer  # noqa: E402
-from financial_disclosure.observability.tracer import TraceEvent  # noqa: E402
+from financial_disclosure.observability import Tracer
+from financial_disclosure.observability.tracer import TraceEvent
 
 
 def test_redact_sensitive_keys_are_masked():

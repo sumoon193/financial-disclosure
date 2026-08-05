@@ -37,7 +37,7 @@ def main(argv: list[str] | None = None) -> int:
     except urllib.error.URLError as exc:
         print(f"BLOCKED: service unavailable ({exc.reason})")
         return 2
-    except Exception as exc:
+    except (TimeoutError, ValueError) as exc:
         print(f"FAILED: {exc.__class__.__name__}")
         return 1
 
@@ -65,8 +65,8 @@ def _model_smoke() -> int:
             return 1
         print("PASSED: Financial Disclosure real model adapter")
         return 0
-    except Exception as exc:
-        if "URLError" in str(exc) or "Timeout" in str(exc):
+    except (ImportError, RuntimeError, ValueError) as exc:
+        if "model request failed" in str(exc):
             print(f"BLOCKED: model service unavailable ({exc.__class__.__name__})")
             return 2
         print(f"FAILED: real model validation ({exc.__class__.__name__})")
@@ -101,7 +101,7 @@ def _run_ocr(input_path: Path, generated: bool) -> int:
             binary=_ocr_binary(),
             engine_version_provider=lambda: _ocr_version(_ocr_binary()),
         ).extract(input_path)
-    except Exception as exc:
+    except (ImportError, OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
         print(f"FAILED: local OCR validation ({exc.__class__.__name__})")
         return 1
     if result.status is OCRQualityStatus.PASSED:

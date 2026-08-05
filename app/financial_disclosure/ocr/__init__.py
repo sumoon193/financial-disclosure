@@ -19,7 +19,7 @@ __all__ = [
     "FrozenAdmissionMetrics",
     "LocalOCRResult",
     "LocalTesseractOcr",
+    "OCRAdmissionError",
     "OCRMetrics",
     "OCRQualityStatus",
-    "OCRAdmissionError",
 ]

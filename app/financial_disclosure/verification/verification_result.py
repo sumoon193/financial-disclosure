@@ -16,7 +16,7 @@ class VerificationResult:
         if not input.fact.fact_id:
             return FD06Result(
                 fact_id=input.fact.fact_id,
-                discrepancy=Decimal("0"),
+                discrepancy=Decimal(0),
                 tolerance=input.tolerance,
                 within_tolerance=False,
                 provenance=input.fact.provenance,
@@ -28,7 +28,7 @@ class VerificationResult:
         if input.tolerance < 0:
             return FD06Result(
                 fact_id=input.fact.fact_id,
-                discrepancy=Decimal("0"),
+                discrepancy=Decimal(0),
                 tolerance=input.tolerance,
                 within_tolerance=False,
                 provenance=input.fact.provenance,

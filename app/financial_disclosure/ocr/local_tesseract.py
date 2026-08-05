@@ -149,7 +149,7 @@ class LocalTesseractOcr:
         confidences = [confidence for _, values in words for confidence in values]
         text = " ".join(value for value, _ in words)
         metrics = OCRMetrics(
-            accuracy=sum(confidences) / Decimal(len(confidences)) / Decimal("100"),
+            accuracy=sum(confidences) / Decimal(len(confidences)) / Decimal(100),
             coverage=Decimal(len(words)) / Decimal(len(pages)),
         )
         status = (
@@ -182,7 +182,7 @@ class LocalTesseractOcr:
         return LocalOCRResult(
             status=status,
             text="",
-            metrics=OCRMetrics(Decimal("0"), Decimal("0")),
+            metrics=OCRMetrics(Decimal(0), Decimal(0)),
             engine="tesseract",
             engine_version=self._engine_version_provider(),
             languages=self._languages,
