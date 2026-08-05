@@ -27,3 +27,12 @@ def test_editable_install_metadata_is_ignored() -> None:
 def test_governance_commands_use_current_python_interpreter() -> None:
     source = (ROOT / "tools" / "governance" / "run.py").read_text(encoding="utf-8")
     assert "sys.executable" in source
+
+
+def test_package_declares_api_runtime_dependencies() -> None:
+    config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    dependencies = config["project"]["dependencies"]
+
+    assert any(dependency.startswith("fastapi") for dependency in dependencies)
+    assert any(dependency.startswith("pydantic") for dependency in dependencies)
+    assert any(dependency.startswith("httpx") for dependency in dependencies)
