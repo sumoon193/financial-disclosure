@@ -3,14 +3,14 @@
   "project_id": "financial-disclosure",
   "branch": "codex/financial-disclosure/integration-v2",
   "base_sha": "5f781ad7f2ec03caee50124b94b35d64a5a90944",
-  "commit_sha": "f8d2b03fed724a210538b882e304ee3bef4f985d",
+  "commit_sha": "94f5af9a169256c31ea418c372154d5132b3bb45",
   "red": {
     "command": "python -m pytest tests/governance/test_governance_contract.py -q",
-    "observed": "README scope, detached push branch resolution, package discovery and egg-info exclusion were incomplete"
+    "observed": "README scope, detached push branch resolution, package discovery, egg-info exclusion and PATH-dependent Python selection were incomplete"
   },
   "green": {
     "command": "python -m pytest -q",
-    "result": "128 passed, 1 dependency warning"
+    "result": "129 passed, 1 dependency warning"
   },
   "regression": {
     "command": "python -m ruff check app tests scripts && python -m mypy app/financial_disclosure",
