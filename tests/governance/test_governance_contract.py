@@ -36,3 +36,4 @@ def test_package_declares_api_runtime_dependencies() -> None:
     assert any(dependency.startswith("fastapi") for dependency in dependencies)
     assert any(dependency.startswith("pydantic") for dependency in dependencies)
     assert any(dependency.startswith("httpx") for dependency in dependencies)
+    assert any(dependency.startswith("pillow") for dependency in dependencies)
