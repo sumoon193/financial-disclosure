@@ -17,7 +17,7 @@ _SCRIPTS = Path(__file__).resolve().parents[3] / "scripts" / "financial_disclosu
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
-import release_drill  # noqa: E402
+import release_drill
 
 DrillLog = release_drill.DrillLog
 ErrorContract = release_drill.ErrorContract

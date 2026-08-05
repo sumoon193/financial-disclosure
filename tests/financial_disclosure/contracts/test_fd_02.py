@@ -17,7 +17,7 @@ _APP = Path(__file__).resolve().parents[3] / "app"
 if str(_APP) not in sys.path:
     sys.path.insert(0, str(_APP))
 
-from financial_disclosure.contracts import (  # noqa: E402
+from financial_disclosure.contracts import (
     CitationAnchor,
     ErrorCode,
     ErrorContract,

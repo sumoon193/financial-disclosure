@@ -1,0 +1,22 @@
+{
+  "task_id": "INTEGRATION-V4",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/integration-v4",
+  "base_sha": "6aeee51ae862de60edde74c51d8e0bb01a8e95e8",
+  "commit_sha": "75d54807ebac8b5bcf9308326e40024913d8cba5",
+  "red": {
+    "command": "python -m pytest tests/governance/test_governance_contract.py -q",
+    "result": "initially failed because API dependencies were undeclared; remote CI then exposed undeclared Pillow used by the generated OCR fixture"
+  },
+  "green": {
+    "command": "python -m pytest tests/governance/test_governance_contract.py -q",
+    "result": "5 passed"
+  },
+  "regression": {
+    "command": "python -m pytest -q && python -m compileall -q app tests scripts",
+    "result": "131 passed, 1 dependency warning; compileall passed"
+  },
+  "files": ["pyproject.toml", "tests/governance/test_governance_contract.py"],
+  "risks": ["SEC and OTel availability remain environment-specific live checks"],
+  "status": "complete"
+}

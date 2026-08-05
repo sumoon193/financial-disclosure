@@ -17,10 +17,10 @@ _APP = Path(__file__).resolve().parents[3] / "app"
 if str(_APP) not in sys.path:
     sys.path.insert(0, str(_APP))
 
-from financial_disclosure.formulas import (  # noqa: E402
+from financial_disclosure.formulas import (
+    Fact,
     FD04Input,
     FD04Result,
-    Fact,
     FilingIdentity,
     FormulaError,
 )
@@ -35,7 +35,7 @@ def test_sum_preserves_unit_scale_rounding_and_lineage():
     )
     assert isinstance(result, FD04Result)
     assert result.error is None
-    assert result.value == Decimal("300")
+    assert result.value == Decimal(300)
     assert result.unit == "USD"
     assert result.scale == 0
     assert result.rounding == "ROUND_HALF_EVEN"
@@ -50,7 +50,7 @@ def test_sum_applies_scale_to_magnitude():
         )
     )
     assert result.error is None
-    assert result.value == Decimal("2000000")
+    assert result.value == Decimal(2000000)
     assert result.scale == 6
 
 
@@ -75,7 +75,7 @@ def test_divide_produces_per_share_with_lineage():
         )
     )
     assert result.error is None
-    assert result.value == Decimal("25")
+    assert result.value == Decimal(25)
     assert result.unit == "USD/shares"
     assert result.lineage == ("ni", "sh")
 
@@ -129,4 +129,4 @@ def test_result_is_frozen():
         FD04Input(operation="sum", facts=(Fact("f1", "1", "USD", 0),))
     )
     with pytest.raises(FrozenInstanceError):
-        result.value = Decimal("2")  # type: ignore[misc]
+        result.value = Decimal(2)  # type: ignore[misc]

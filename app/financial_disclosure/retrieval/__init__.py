@@ -13,6 +13,6 @@ __all__ = [
     "FD05Input",
     "FD05Result",
     "Retrieval",
-    "Retriever",
     "RetrievalError",
+    "Retriever",
 ]

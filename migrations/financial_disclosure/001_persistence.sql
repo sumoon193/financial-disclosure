@@ -16,3 +16,21 @@ CREATE TABLE IF NOT EXISTS worker_lease (
     owner        TEXT    NOT NULL,
     expires_at   REAL    NOT NULL
 );
+CREATE TABLE IF NOT EXISTS filing (
+    filing_id TEXT PRIMARY KEY,
+    form TEXT NOT NULL,
+    source_format TEXT NOT NULL,
+    created_at REAL NOT NULL
+);
+CREATE TABLE IF NOT EXISTS verification_run (
+    run_id TEXT PRIMARY KEY,
+    filing_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    result TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS audit_event (
+    event_id TEXT PRIMARY KEY,
+    event_type TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    created_at REAL NOT NULL
+);

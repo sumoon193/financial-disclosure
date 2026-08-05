@@ -35,7 +35,7 @@ class VerificationRun:
     document_version: str
     state: VerificationState = VerificationState.CREATED
 
-    def advance(self, target: VerificationState) -> "VerificationRun | ErrorContract":
+    def advance(self, target: VerificationState) -> VerificationRun | ErrorContract:
         """合法转换返回新 run，非法转换返回固定 typed 错误。"""
         if target not in _TRANSITIONS[self.state]:
             return ErrorContract(

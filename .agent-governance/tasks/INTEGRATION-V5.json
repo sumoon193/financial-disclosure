@@ -1,0 +1,56 @@
+{
+  "task_id": "INTEGRATION-V5",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/integration-v5",
+  "base_ref": "codex/financial-disclosure/integration-v4",
+  "base_sha": "d6a05d4d34edf54a6bd507a07f14b9b162708ff7",
+  "dependencies": ["INTEGRATION-V4"],
+  "priority": "high",
+  "owner_model": "primary-integrator",
+  "reviewer": "primary-integrator",
+  "goal": "Keep offline regression independent of a host Tesseract binary while explicitly verifying blocked live-smoke semantics.",
+  "max_changed_files": 5,
+  "max_diff_lines": 180,
+  "scope": {
+    "allowed_paths": ["tests/governance/**", "tests/financial_disclosure/test_live_smoke.py"],
+    "allowed_create_paths": [],
+    "allowed_delete_paths": [],
+    "read_only_paths": ["AGENTS.md", ".agent-governance/**", "LICENSE"],
+    "read_denylist": [".env", "data/private/**", "storage/raw-restricted/**"],
+    "write_denylist": [".env", "data/private/**", "storage/raw-restricted/**"]
+  },
+  "behavior": {
+    "observable_result": "Offline CI verifies generated OCR fixtures and reports exit 2 when the real local binary is unavailable.",
+    "failure_modes": ["missing OCR binary", "fixture generation failure", "incorrect live-smoke exit code"],
+    "non_goals": ["fake OCR acceptance", "application behavior changes", "merge or force-push", "secret material"]
+  },
+  "capabilities": {
+    "approval_flow_changes": false,
+    "database_changes": false,
+    "dependency_changes": false,
+    "docker": "disabled",
+    "external_services": ["ocr"],
+    "network": "disabled",
+    "public_api_changes": false,
+    "runtime_kernel_changes": false
+  },
+  "delivery": {
+    "commit_required": true,
+    "merge_allowed": false,
+    "force_push_allowed": false,
+    "push_allowed": true,
+    "handoff_file": ".agent-governance/handoffs/INTEGRATION-V5.json"
+  },
+  "security": {
+    "secret_policy": "no-secret-content",
+    "read_denylist": [".env", "data/private/**", "storage/raw-restricted/**"],
+    "write_denylist": [".env", "data/private/**", "storage/raw-restricted/**"]
+  },
+  "tdd": {
+    "red_command": "python -m pytest tests/governance/test_governance_contract.py -q",
+    "red_test_files": ["tests/governance/test_governance_contract.py"],
+    "expected_red_reason": "offline OCR test unconditionally requires a live Tesseract success instead of asserting blocked semantics",
+    "green_command": "python -m pytest tests/governance/test_governance_contract.py tests/financial_disclosure/test_live_smoke.py -q",
+    "regression_commands": ["python -m pytest -q", "python -m compileall -q app tests scripts"]
+  }
+}

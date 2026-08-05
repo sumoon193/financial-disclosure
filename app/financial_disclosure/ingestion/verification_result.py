@@ -16,7 +16,7 @@ def _content_hash(content: str) -> str:
 
 
 def _document_version_id(filing_id: str, version: str) -> str:
-    raw = f"{filing_id}|{version}".encode("utf-8")
+    raw = f"{filing_id}|{version}".encode()
     return "doc-" + hashlib.sha256(raw).hexdigest()[:16]
 
 

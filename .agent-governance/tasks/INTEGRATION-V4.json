@@ -1,0 +1,56 @@
+{
+  "task_id": "INTEGRATION-V4",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/integration-v4",
+  "base_ref": "codex/financial-disclosure/integration-v2",
+  "base_sha": "6aeee51ae862de60edde74c51d8e0bb01a8e95e8",
+  "dependencies": ["INTEGRATION-V2"],
+  "priority": "high",
+  "owner_model": "primary-integrator",
+  "reviewer": "primary-integrator",
+  "goal": "Declare the Financial Disclosure runtime and test dependencies so editable installation is sufficient for governance CI.",
+  "max_changed_files": 6,
+  "max_diff_lines": 250,
+  "scope": {
+    "allowed_paths": ["pyproject.toml", "tests/governance/**"],
+    "allowed_create_paths": [],
+    "allowed_delete_paths": [],
+    "read_only_paths": ["AGENTS.md", ".agent-governance/**", "LICENSE"],
+    "read_denylist": [".env", "data/private/**", "storage/raw-restricted/**"],
+    "write_denylist": [".env", "data/private/**", "storage/raw-restricted/**"]
+  },
+  "behavior": {
+    "observable_result": "A clean Python 3.12 environment can install the package and run the full offline suite without undeclared imports.",
+    "failure_modes": ["missing runtime dependency", "editable installation failure", "governance regression failure"],
+    "non_goals": ["application behavior changes", "merge or force-push", "secret material", "learning documents"]
+  },
+  "capabilities": {
+    "approval_flow_changes": false,
+    "database_changes": false,
+    "dependency_changes": true,
+    "docker": "disabled",
+    "external_services": [],
+    "network": "dependency-install-only",
+    "public_api_changes": false,
+    "runtime_kernel_changes": false
+  },
+  "delivery": {
+    "commit_required": true,
+    "merge_allowed": false,
+    "force_push_allowed": false,
+    "push_allowed": true,
+    "handoff_file": ".agent-governance/handoffs/INTEGRATION-V4.json"
+  },
+  "security": {
+    "secret_policy": "no-secret-content",
+    "read_denylist": [".env", "data/private/**", "storage/raw-restricted/**"],
+    "write_denylist": [".env", "data/private/**", "storage/raw-restricted/**"]
+  },
+  "tdd": {
+    "red_command": "python -m pytest tests/governance/test_governance_contract.py -q",
+    "red_test_files": ["tests/governance/test_governance_contract.py"],
+    "expected_red_reason": "pyproject omits FastAPI, Pydantic and HTTPX even though production and API tests import them",
+    "green_command": "python -m pytest tests/governance/test_governance_contract.py -q",
+    "regression_commands": ["python -m pytest -q", "python -m compileall -q app tests scripts"]
+  }
+}

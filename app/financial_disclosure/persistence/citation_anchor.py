@@ -29,7 +29,9 @@ class CitationAnchor:
                 return FD08Result(
                     operation=op,
                     ok=False,
-                    error=ErrorContract(PersistenceError.NOT_FOUND, f"fact not found: {input.fact_id}"),
+                    error=ErrorContract(
+                        PersistenceError.NOT_FOUND, f"fact not found: {input.fact_id}"
+                    ),
                 )
             value, unit, version = got
             return FD08Result(operation=op, ok=True, value=value, unit=unit, version=version)

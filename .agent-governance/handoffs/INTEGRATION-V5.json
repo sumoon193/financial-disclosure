@@ -1,0 +1,26 @@
+{
+  "task_id": "INTEGRATION-V5",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/integration-v5",
+  "base_sha": "d6a05d4d34edf54a6bd507a07f14b9b162708ff7",
+  "commit_sha": "1c22037ca77212f65a756a44f1c23fec576e1357",
+  "red": {
+    "command": "python -m pytest tests/governance/test_governance_contract.py -q",
+    "result": "1 failed, 5 passed because offline OCR still required an unconditional live success"
+  },
+  "green": {
+    "command": "python -m pytest tests/governance/test_governance_contract.py tests/financial_disclosure/test_live_smoke.py -q",
+    "result": "10 passed"
+  },
+  "regression": {
+    "command": "python -m pytest -q && python -m compileall -q app tests scripts",
+    "result": "132 passed, 1 dependency warning; compileall passed"
+  },
+  "live": {
+    "result": "real local Tesseract remains a separate smoke command",
+    "acceptance": "missing binary returns blocked exit 2 and is never reported as passed"
+  },
+  "files": ["tests/governance/test_governance_contract.py", "tests/financial_disclosure/test_live_smoke.py"],
+  "risks": ["real OCR success still depends on the host Tesseract binary and language data"],
+  "status": "complete"
+}

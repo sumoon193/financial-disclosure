@@ -41,7 +41,7 @@ class FilingIdentity:
         )
 
     def _quantize(self, value: Decimal, precision: int) -> Decimal:
-        quantum = Decimal("1").scaleb(-precision)
+        quantum = Decimal(1).scaleb(-precision)
         return value.quantize(quantum, rounding=ROUND_HALF_EVEN)
 
     def _sum(self, input: FD04Input, values: list[NumericValue]) -> FD04Result:
@@ -52,7 +52,7 @@ class FilingIdentity:
                 FormulaError.UNIT_MISMATCH,
                 f"unit mismatch: {sorted(units)}",
             )
-        total = sum((value.value for value in values), Decimal("0"))
+        total = sum((value.value for value in values), Decimal(0))
         return FD04Result(
             operation=input.operation,
             value=self._quantize(total, input.precision),
@@ -85,7 +85,7 @@ class FilingIdentity:
     def _error(self, input: FD04Input, code: str, message: str) -> FD04Result:
         return FD04Result(
             operation=input.operation,
-            value=Decimal("0"),
+            value=Decimal(0),
             unit="",
             scale=0,
             rounding=DEFAULT_ROUNDING,
