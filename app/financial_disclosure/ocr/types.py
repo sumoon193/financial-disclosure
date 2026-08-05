@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
+from enum import StrEnum
 
 from ..contracts.errors import ErrorContract
 
@@ -42,4 +43,23 @@ class FD07Result:
     coverage: Decimal
     min_accuracy: Decimal
     min_coverage: Decimal
+    error: ErrorContract | None = None
+
+
+class OCRQualityStatus(StrEnum):
+    PASSED = "passed"
+    NEEDS_REVIEW = "needs_review"
+    BLOCKED = "blocked"
+    FAILED = "failed"
+
+
+@dataclass(frozen=True)
+class LocalOCRResult:
+    status: OCRQualityStatus
+    text: str
+    metrics: OCRMetrics
+    engine: str
+    engine_version: str | None
+    languages: tuple[str, ...]
+    input_sha256: str
     error: ErrorContract | None = None

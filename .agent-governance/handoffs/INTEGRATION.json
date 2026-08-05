@@ -1,0 +1,14 @@
+{
+  "task_id": "INTEGRATION",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/quality-sweep",
+  "base_sha": "3b3c46f41b33a33e0ec262ec277ab8d207cc6163",
+  "commit_sha": "bef98bb3281439acdf703ac2dad4b1583f02135b",
+  "red": {"command": "python -m pytest tests -q", "observed": "API and durable persistence behavior absent before integration"},
+  "green": {"command": "python -m pytest tests -q -p no:cacheprovider", "result": "118 passed"},
+  "regression": {"command": "python -m compileall -q app", "result": "not run after final edits"},
+  "files": ["app/financial_disclosure/api.py", "app/financial_disclosure/model", "app/financial_disclosure/persistence", "migrations/financial_disclosure", "tests/financial_disclosure/test_api_and_persistence.py"],
+  "not_run": ["scripts/financial_disclosure/live_smoke.py: blocked until service and external credentials are supplied"],
+  "risks": ["SEC/OCR/database/OTel live integrations unverified"],
+  "status": "blocked-live"
+}
