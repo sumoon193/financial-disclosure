@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import sqlite3
 import time
-from typing import Callable
+from collections.abc import Callable
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS versioned_fact (
@@ -42,12 +42,15 @@ class PersistenceStore:
 
     def put_fact(self, fact_id: str, version: str, value: str, unit: str) -> None:
         self._conn.execute(
-            "INSERT OR REPLACE INTO versioned_fact (fact_id, version, value, unit) VALUES (?,?,?,?)",
+            "INSERT OR REPLACE INTO versioned_fact"
+            " (fact_id, version, value, unit) VALUES (?,?,?,?)",
             (fact_id, version, value, unit),
         )
         self._conn.commit()
 
-    def get_fact(self, fact_id: str, version: str | None = None):
+    def get_fact(
+        self, fact_id: str, version: str | None = None
+    ) -> tuple[str, str, str] | None:
         if version is not None:
             cur = self._conn.execute(
                 "SELECT value, unit, version FROM versioned_fact WHERE fact_id=? AND version=?",
@@ -55,7 +58,8 @@ class PersistenceStore:
             )
         else:
             cur = self._conn.execute(
-                "SELECT value, unit, version FROM versioned_fact WHERE fact_id=? ORDER BY rowid DESC LIMIT 1",
+                "SELECT value, unit, version FROM versioned_fact"
+                " WHERE fact_id=? ORDER BY rowid DESC LIMIT 1",
                 (fact_id,),
             )
         row = cur.fetchone()

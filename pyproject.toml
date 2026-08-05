@@ -1,7 +1,50 @@
 [project]
 name = "financial-disclosure"
 version = "0.1.0"
+description = "财务披露核验工作台：契约驱动的 SEC/XBRL/HTML 披露核验与审计系统"
+readme = "README.md"
 requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "sumoon193" }]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["app"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+# E/F pycodestyle+pyflakes, I import排序, UP pyupgrade, B bugbear
+# 不启用 FURB (refurb 风格建议，如 Decimal("1")→Decimal(1) 会破坏金融场景的字符串构造意图)
+# 不启用 UP042 (str,Enum→StrEnum 改变序列化行为，属业务逻辑改动)
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["UP042"]
+
+[tool.ruff.lint.per-file-ignores]
+# FD-12 实现位 scripts 侧，内置 ErrorContract 与 contracts.ErrorContract 并存是任务边界决定的
+"scripts/financial_disclosure/release_drill.py" = ["F811"]
+# 测试里 Decimal("1") 是刻意的字符串构造，保留
+"tests/**" = ["FURB157", "E501"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "app"
+packages = "financial_disclosure"
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+# scripts 侧 FD-12 的本地 ErrorContract 重复定义不纳入 type 检查范围
+exclude = ["scripts/", "migrations/", "tests/"]
+
+[[tool.mypy.overrides]]
+module = "financial_disclosure.*"
+disallow_untyped_defs = true

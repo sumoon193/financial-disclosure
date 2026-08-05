@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
-from ..retrieval.types import ComputedFact
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # 延迟导入避免与 retrieval 包的循环依赖：retrieval.citation_anchor
+    # 在顶层导入本模块，本模块仅需 ComputedFact 作类型注解。
+    from ..retrieval.types import ComputedFact
 
 
 class ModelAdapter:

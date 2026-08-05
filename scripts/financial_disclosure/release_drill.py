@@ -81,11 +81,15 @@ class VerificationResult:
         if op == "run_drill":
             if not input.drill_type:
                 return FD12Result(
-                    op, False, error=ErrorContract(ReleaseError.INVALID_INPUT, "drill_type required")
+                    op, False,
+                    error=ErrorContract(ReleaseError.INVALID_INPUT, "drill_type required"),
                 )
             if input.drill_type not in DRILL_TYPES:
                 return FD12Result(
-                    op, False, error=ErrorContract(ReleaseError.UNKNOWN_DRILL, f"unknown drill: {input.drill_type}")
+                    op, False,
+                    error=ErrorContract(
+                        ReleaseError.UNKNOWN_DRILL, f"unknown drill: {input.drill_type}"
+                    ),
                 )
             if not input.details:
                 return FD12Result(
@@ -103,5 +107,6 @@ class VerificationResult:
         if op == "drill_log":
             return FD12Result(op, True, log=self._log.records())
         return FD12Result(
-            op, False, error=ErrorContract(ReleaseError.INVALID_OPERATION, f"unknown operation: {op}")
+            op, False,
+            error=ErrorContract(ReleaseError.INVALID_OPERATION, f"unknown operation: {op}"),
         )

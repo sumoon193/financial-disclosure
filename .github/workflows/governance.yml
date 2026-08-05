@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
       - name: install-governance-runtime
         run: |
-          python -m pip install pytest
+          python -m pip install pytest ruff mypy
           if [ -f pyproject.toml ]; then python -m pip install -e .; fi
       - name: manifest
         run: python tools/governance/run.py manifest
@@ -35,6 +35,10 @@ jobs:
         run: python tools/governance/run.py test-integrity
       - name: secrets
         run: python tools/governance/run.py secrets
+      - name: lint
+        run: python -m ruff check app tests scripts
+      - name: typecheck
+        run: python -m mypy app/financial_disclosure
       - name: focused-tests
         run: python tools/governance/run.py focused-tests
       - name: regression
