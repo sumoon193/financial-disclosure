@@ -3,10 +3,10 @@
   "project_id": "financial-disclosure",
   "branch": "codex/financial-disclosure/integration-v4",
   "base_sha": "6aeee51ae862de60edde74c51d8e0bb01a8e95e8",
-  "commit_sha": "b7dca839f7b7e59a9a5cb6020120b8c417429e2f",
+  "commit_sha": "75d54807ebac8b5bcf9308326e40024913d8cba5",
   "red": {
     "command": "python -m pytest tests/governance/test_governance_contract.py -q",
-    "result": "1 failed, 4 passed because production API dependencies were undeclared"
+    "result": "initially failed because API dependencies were undeclared; remote CI then exposed undeclared Pillow used by the generated OCR fixture"
   },
   "green": {
     "command": "python -m pytest tests/governance/test_governance_contract.py -q",
