@@ -1,0 +1,11 @@
+{
+  "task_id": "README-CLEANUP-FINAL",
+  "project_id": "financial-disclosure",
+  "branch": "codex/financial-disclosure/readme-cleanup-final",
+  "base_sha": "df9aa34f92ed53d5370e017142e1f124e7a82370",
+  "max_changed_files": 20,
+  "max_diff_lines": 2000,
+  "scope": {"allowed_paths": ["README.md", "AGENTS.md", ".agent-governance/AGENT-ENTRY.md", "tests/governance/**"], "allowed_create_paths": ["tests/governance/**"], "allowed_delete_paths": [], "read_denylist": [".env"], "write_denylist": [".env"]},
+  "tdd": {"green_command": "python -m pytest tests/governance/test_public_documentation_contract.py -q -p no:cacheprovider", "regression_commands": ["python -m pytest tests -q -p no:cacheprovider", "python -m compileall -q app tests scripts", "python -m ruff check app tests scripts", "python -m mypy app"]},
+  "delivery": {"handoff_file": ".agent-governance/handoffs/README-CLEANUP-FINAL.json"}
+}
