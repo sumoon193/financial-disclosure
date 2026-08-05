@@ -3,7 +3,7 @@
   "project_id": "financial-disclosure",
   "branch": "codex/financial-disclosure/readme-cleanup-v1",
   "base_sha": "5b51980ce3b3921f8f945ed61d0b8140f2e74eff",
-  "commit_sha": "e20a733",
+  "commit_sha": "64f1f4a",
   "red": {"command": "python -m pytest tests/governance/test_public_documentation_contract.py -q -p no:cacheprovider", "result": "2 failed, 1 passed；README 仍为英文结构，当前入口仍有旧治理措辞。"},
   "green": {"command": "python -m pytest tests/governance/test_public_documentation_contract.py -q -p no:cacheprovider", "result": "3 passed"},
   "regression": {"commands": ["python -m pytest tests -q -p no:cacheprovider", "python -m compileall -q app tests scripts", "python -m ruff check app tests scripts", "python -m mypy app"], "result": "135 passed，1 个既有 Starlette 弃用警告；compileall、Ruff、Mypy 全部通过。"},
