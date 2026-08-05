@@ -18,9 +18,9 @@ if str(_APP) not in sys.path:
     sys.path.insert(0, str(_APP))
 
 from financial_disclosure.formulas import (  # noqa: E402
+    Fact,
     FD04Input,
     FD04Result,
-    Fact,
     FilingIdentity,
     FormulaError,
 )

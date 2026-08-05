@@ -123,6 +123,54 @@ def test_invalid_operation_is_rejected():
     assert result.error.code == PersistenceError.INVALID_OPERATION
 
 
+def test_get_fact_missing_returns_not_found():
+    anchor = _anchor()
+    missing = anchor.execute(FD08Input(operation="get_fact", fact_id="nope", version="v1"))
+    assert not missing.ok
+    assert missing.error is not None
+    assert missing.error.code == PersistenceError.NOT_FOUND
+
+
+def test_release_lease_by_non_owner_is_rejected():
+    anchor = _anchor()
+    assert anchor.execute(
+        FD08Input(operation="acquire_lease", lease_id="L1", owner="a", ttl_seconds=50)
+    ).ok
+    released = anchor.execute(
+        FD08Input(operation="release_lease", lease_id="L1", owner="intruder")
+    )
+    assert not released.ok
+    assert released.error is not None
+    assert released.error.code == PersistenceError.LEASE_NOT_HELD
+
+
+def test_release_lease_by_owner_succeeds():
+    anchor = _anchor()
+    anchor.execute(FD08Input(operation="acquire_lease", lease_id="L1", owner="a", ttl_seconds=50))
+    released = anchor.execute(
+        FD08Input(operation="release_lease", lease_id="L1", owner="a")
+    )
+    assert released.ok and released.error is None
+    status = anchor.execute(FD08Input(operation="lease_status", lease_id="L1"))
+    assert not status.lease_active
+
+
+def test_cache_get_missing_returns_not_cached():
+    anchor = _anchor()
+    miss = anchor.execute(FD08Input(operation="cache_get", cache_key="absent"))
+    assert miss.ok and not miss.cached and miss.value is None
+
+
+def test_put_fact_requires_all_fields():
+    anchor = _anchor()
+    missing_value = anchor.execute(
+        FD08Input(operation="put_fact", fact_id="f1", version="v1")
+    )
+    assert not missing_value.ok
+    assert missing_value.error is not None
+    assert missing_value.error.code == PersistenceError.INVALID_INPUT
+
+
 def test_migration_declares_persistence_tables():
     sql = MIGRATION.read_text(encoding="utf-8")
     for table in ("versioned_fact", "query_cache", "worker_lease"):

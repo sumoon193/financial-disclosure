@@ -67,7 +67,7 @@ class FilingIdentity:
                     f"permission denied for {input.operation}",
                 ),
             )
-        attributes = (("operation", input.operation),)
+        attributes: tuple[tuple[str, str], ...] = (("operation", input.operation),)
         if input.sensitive_value is not None:
             attributes += (("token", input.sensitive_value),)
         self._tracer.record("operation", input.operation, attributes)

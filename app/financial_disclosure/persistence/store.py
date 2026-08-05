@@ -6,9 +6,11 @@ Schema 与 migrations/financial_disclosure/001_persistence.sql 一致。
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import time
-from typing import Callable
+from collections.abc import Callable
+from pathlib import Path
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS versioned_fact (
@@ -27,6 +29,24 @@ CREATE TABLE IF NOT EXISTS worker_lease (
     owner        TEXT    NOT NULL,
     expires_at   REAL    NOT NULL
 );
+CREATE TABLE IF NOT EXISTS filing (
+    filing_id TEXT PRIMARY KEY,
+    form TEXT NOT NULL,
+    source_format TEXT NOT NULL,
+    created_at REAL NOT NULL
+);
+CREATE TABLE IF NOT EXISTS verification_run (
+    run_id TEXT PRIMARY KEY,
+    filing_id TEXT NOT NULL,
+    status TEXT NOT NULL,
+    result TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS audit_event (
+    event_id TEXT PRIMARY KEY,
+    event_type TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    created_at REAL NOT NULL
+);
 """
 
 Clock = Callable[[], float]
@@ -35,19 +55,34 @@ Clock = Callable[[], float]
 class PersistenceStore:
     """版本化事实、查询缓存与 worker 租约的持久化存储。"""
 
-    def __init__(self, clock: Clock | None = None) -> None:
-        self._conn = sqlite3.connect(":memory:")
+    def __init__(
+        self,
+        clock: Clock | None = None,
+        database_path: str | Path | None = None,
+    ) -> None:
+        configured_path = database_path or os.getenv("FINANCIAL_DISCLOSURE_DB")
+        self.database_path = str(configured_path or ":memory:")
+        if self.database_path != ":memory:":
+            Path(self.database_path).parent.mkdir(parents=True, exist_ok=True)
+        self._conn = sqlite3.connect(self.database_path)
+        self._conn.execute("PRAGMA foreign_keys = ON")
         self._conn.executescript(_SCHEMA)
         self._clock = clock or time.time
 
+    def close(self) -> None:
+        self._conn.close()
+
     def put_fact(self, fact_id: str, version: str, value: str, unit: str) -> None:
         self._conn.execute(
-            "INSERT OR REPLACE INTO versioned_fact (fact_id, version, value, unit) VALUES (?,?,?,?)",
+            "INSERT OR REPLACE INTO versioned_fact"
+            " (fact_id, version, value, unit) VALUES (?,?,?,?)",
             (fact_id, version, value, unit),
         )
         self._conn.commit()
 
-    def get_fact(self, fact_id: str, version: str | None = None):
+    def get_fact(
+        self, fact_id: str, version: str | None = None
+    ) -> tuple[str, str, str] | None:
         if version is not None:
             cur = self._conn.execute(
                 "SELECT value, unit, version FROM versioned_fact WHERE fact_id=? AND version=?",
@@ -55,7 +90,8 @@ class PersistenceStore:
             )
         else:
             cur = self._conn.execute(
-                "SELECT value, unit, version FROM versioned_fact WHERE fact_id=? ORDER BY rowid DESC LIMIT 1",
+                "SELECT value, unit, version FROM versioned_fact"
+                " WHERE fact_id=? ORDER BY rowid DESC LIMIT 1",
                 (fact_id,),
             )
         row = cur.fetchone()
