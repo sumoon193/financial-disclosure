@@ -1,0 +1,39 @@
+server:
+  port: ${SERVER_PORT:8001}
+
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://127.0.0.1:5433/financial_disclosure}
+    username: ${POSTGRES_USER:financial}
+    password: ${POSTGRES_PASSWORD:financial_local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6380}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+financial:
+  storage:
+    endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9010}
+    access-key: ${MINIO_ACCESS_KEY:minioadmin}
+    secret-key: ${MINIO_SECRET_KEY:minioadmin}
+    bucket: ${MINIO_BUCKET:financial-disclosures}
+  sec:
+    user-agent: ${FINANCIAL_SEC_USER_AGENT:}
+  ocr:
+    binary: ${FINANCIAL_TESSERACT_BINARY:tesseract}
+    language: ${FINANCIAL_OCR_LANGUAGE:eng}
+  agent:
+    enabled: ${FINANCIAL_AGENT_ENABLED:false}
+    workspace: ${FINANCIAL_AGENT_WORKSPACE:./runtime/agentscope}
