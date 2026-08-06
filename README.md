@@ -1,73 +1,54 @@
-# Financial Disclosure Workbench
+# Financial Disclosure
 
-Financial Disclosure is a typed FastAPI service for versioned filing intake,
-Decimal-based verification, citation-preserving explanations, persistence and
-local OCR admission. Offline tests use deterministic Recorded adapters; live
-model and OCR checks are reported separately and never masquerade as offline
-acceptance.
+Financial Disclosure 是一个基于 FastAPI 的财务披露处理服务，负责文件接收、事实计算、校验、引用和审计。Decimal 计算在服务端完成，模型只解释已经计算出的事实。
 
-## Implemented capabilities
+## 功能
 
-- Typed filing and verification HTTP APIs with request validation.
-- Versioned filing, fact, cache, lease, verification-run and audit storage.
-- Decimal calculations that are not delegated to a language model.
-- Real Qwen explanation adapter that must preserve computed facts.
-- Local Tesseract OCR with confidence and coverage quality gates.
-- Lifecycle rollback, recovery drills, citations and authorization contracts.
+- 类型化的申报和验证 API
+- SEC/XBRL/HTML 来源适配与本地 Recorded 数据源
+- 持久化事实、缓存、租约、验证运行和审计记录
+- 本地 Tesseract OCR 质量门禁与可恢复流程
+- Qwen 解释适配器和独立 live smoke
 
-## Run locally
+## 技术栈
 
-```powershell
-Set-Location "D:\Code\agent study\managed-projects\financial-disclosure"
-& "D:\py\py3.12\python.exe" -m uvicorn financial_disclosure.api:app `
-  --app-dir app --host 127.0.0.1 --port 8001
-```
+Python 3.12、FastAPI、Pydantic、Decimal、Tesseract OCR。真实模型和外部来源按需配置，离线测试不访问外部网络。
 
-Open:
-
-- API documentation: <http://127.0.0.1:8001/docs>
-- Health: <http://127.0.0.1:8001/health>
-
-## Offline verification
+## 本地启动
 
 ```powershell
-Set-Location "D:\Code\agent study\managed-projects\financial-disclosure"
-& "D:\py\py3.12\python.exe" -m pytest -q
-& "D:\py\py3.12\python.exe" -m compileall -q app tests scripts
-& "D:\py\py3.12\python.exe" -m ruff check app tests scripts
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e .
+python -m uvicorn financial_disclosure.api:app --app-dir app --host 127.0.0.1 --port 8001
 ```
 
-## Live verification
+API 文档：<http://127.0.0.1:8001/docs>。健康检查：<http://127.0.0.1:8001/health>。
+
+## 测试
+
+```powershell
+python -m pytest -q
+python -m compileall -q app tests scripts
+ruff check app tests scripts
+mypy app
+```
+
+## 真实服务验证
 
 ```powershell
 $env:FINANCIAL_DISCLOSURE_BASE_URL = "http://127.0.0.1:8001"
-
-& "D:\py\py3.12\python.exe" ".\scripts\financial_disclosure\live_smoke.py" --component health
-& "D:\py\py3.12\python.exe" ".\scripts\financial_disclosure\live_smoke.py" --component model
-& "D:\py\py3.12\python.exe" ".\scripts\financial_disclosure\live_smoke.py" --component ocr
+python .\scripts\financial_disclosure\live_smoke.py --component health
+python .\scripts\financial_disclosure\live_smoke.py --component model
+python .\scripts\financial_disclosure\live_smoke.py --component ocr
 ```
 
-The OCR smoke uses the real local Tesseract binary and generates a temporary
-test image when `FINANCIAL_DISCLOSURE_OCR_SAMPLE` is not supplied. To test an
-authorized PDF, set that variable to its local path before running OCR.
+OCR smoke 默认生成临时图片，也可以通过 `FINANCIAL_DISCLOSURE_OCR_SAMPLE` 指定本地文件。模型验证需要 `QWEN_API_KEY` 和 `QWEN_CHAT_MODEL`。退出码 `0` 表示通过，`1` 表示服务可用但校验失败，`2` 表示缺少服务或授权。
 
-## Live-smoke exit codes
+## 使用边界
 
-- `0`: real verification passed.
-- `1`: connected, but validation failed.
-- `2`: blocked by missing credentials, authorization or service availability.
-
-## Security and authenticity
-
-Keep API keys in local environment variables and never commit `.env`. Fake and
-Recorded adapters are offline test tools only. Missing real configuration is
-reported as blocked rather than silently downgraded.
-
-## Governance
-
-Development follows `AGENTS.md`, `.agent-governance/` and the active task
-handoff. Migrations live in `migrations/financial_disclosure/`.
+请勿提交 `.env`、API key 或私有数据。Fake/Recorded 适配器仅供离线测试使用，不代表真实服务验证。
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT，见 [LICENSE](LICENSE)。
