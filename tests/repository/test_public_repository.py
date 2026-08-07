@@ -47,10 +47,10 @@ def test_readme_is_public_facing_and_portable() -> None:
         assert forbidden not in readme
     for required in (
         "financial_disclosure.api:app",
-        "FINANCIAL_DISCLOSURE_DB",
-        "POST` | `/filings",
-        "POST` | `/verification-runs",
-        "scripts\\financial_disclosure\\live_smoke.py",
+        "POSTGRES_URL",
+        "POST` | `/api/filings",
+        "POST` | `/api/verification-runs",
+        "scripts/financial_disclosure/live_smoke.py",
         "Tesseract",
         "MIT",
     ):
