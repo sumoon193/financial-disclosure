@@ -105,6 +105,14 @@ docker compose -f compose.yaml --profile full up -d --build --wait
 | MinIO API | http://127.0.0.1:9010 |
 | MinIO Console | http://127.0.0.1:9011 |
 
+如果端口被本机程序占用，可在启动 Compose 的同一 PowerShell 窗口覆盖端口：
+
+```powershell
+$env:FINANCIAL_MINIO_API_PORT = "19010"
+$env:FINANCIAL_MINIO_CONSOLE_PORT = "19011"
+docker compose -f compose.yaml --profile full up -d --build --wait
+```
+
 停止环境：
 
 ```bash
@@ -256,7 +264,7 @@ python scripts/financial_disclosure/live_smoke.py --component model
 
 PowerShell 使用 `$env:变量名 = "值"` 设置相同环境变量。模型 smoke 还需要 `QWEN_API_KEY` 和 `QWEN_CHAT_MODEL`。
 
-退出码统一为：`0` 验证通过，`1` 已连接但断言失败，`2` 缺少服务、依赖或授权。当前脚本尚未覆盖 PostgreSQL、Redis、MinIO 和 SEC 的独立读写 smoke，因此这些集成不能仅凭容器健康状态标记通过。
+退出码统一为：`0` 验证通过，`1` 已连接但断言失败，`2` 缺少服务、依赖或授权。PostgreSQL/Redis、MinIO 和 SEC 分别由独立 live smoke 验证；容器健康状态不能替代这些结果。
 
 浏览器 E2E 需要在 `financial` Realm 创建具有 `financial-reviewer` 角色的本地用户：
 

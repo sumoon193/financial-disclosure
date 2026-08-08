@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from scripts.financial_disclosure.production_readiness import (
@@ -66,3 +68,9 @@ def test_gate_commands_keep_live_sources_distinct() -> None:
     assert "--component ocr" in commands["tesseract"]
     assert "npm --prefix frontend run test:e2e:live" in commands["business-e2e"]
     assert all("API_KEY=" not in command for command in commands.values())
+
+
+def test_compose_minio_host_ports_are_overridable() -> None:
+    compose = Path("compose.yaml").read_text(encoding="utf-8")
+    assert '${FINANCIAL_MINIO_API_PORT:-9010}:9000' in compose
+    assert '${FINANCIAL_MINIO_CONSOLE_PORT:-9011}:9001' in compose
