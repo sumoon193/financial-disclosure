@@ -302,6 +302,43 @@ pdftoppm -v
 - OCR、模型、外部来源、数据库和对象存储需要分别验收。
 - 当前仍缺少真实中间件独立 smoke、三轮评测、压测和故障恢复证据，不能标记为 deployment-ready。
 
+## 生产验收与 IDEA 启动
+
+当前验收分支绑定 commit dae9ad0c7d329e75c025f1598def559937d49f12。查看完整门禁命令：
+
+~~~powershell
+python .\scripts\financial_disclosure\production_readiness.py --describe
+~~~
+
+Windows PowerShell 启动完整栈：
+
+~~~powershell
+$env:KEYCLOAK_ADMIN_PASSWORD = Read-Host "Keycloak local password"
+docker compose -f compose.yaml --profile full up -d --build --wait
+Invoke-WebRequest http://127.0.0.1:8001/actuator/health
+Invoke-WebRequest http://127.0.0.1:3101
+~~~
+
+Java 服务可在 IntelliJ IDEA 中导入根目录 pom.xml，运行 Spring Boot 主类或 Maven test。Python SEC/OCR/模型适配器需要 IDEA Python 插件或 PyCharm；PostgreSQL、Redis、MinIO、Keycloak 和前端仍由 Compose 提供。
+
+真实集成入口：
+
+~~~powershell
+$env:FINANCIAL_DISCLOSURE_BASE_URL = "http://127.0.0.1:8001"
+python .\scripts\financial_disclosure\live_smoke.py --component sec
+python .\scripts\financial_disclosure\live_smoke.py --component database
+python .\scripts\financial_disclosure\live_smoke.py --component storage
+python .\scripts\financial_disclosure\live_smoke.py --component ocr
+python .\scripts\financial_disclosure\live_smoke.py --component model
+~~~
+
+SEC smoke 必须设置 FINANCIAL_SEC_USER_AGENT；模型 smoke 必须设置 QWEN_API_KEY 和 QWEN_CHAT_MODEL。缺少授权时返回 2 并保持 blocked，不能提交密钥或把本地 fixture 标成 SEC/模型通过。
+
+~~~powershell
+$sha = (git rev-parse HEAD).Trim()
+python .\scripts\financial_disclosure\production_readiness.py --evidence .\reports\production-v2\evidence.json --expected-commit $sha
+~~~
+
 ## License
 
 MIT，详见 [LICENSE](LICENSE)。

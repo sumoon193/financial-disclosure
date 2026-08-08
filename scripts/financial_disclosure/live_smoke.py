@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -15,12 +16,22 @@ from urllib.parse import urlparse
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--component", choices=("health", "model", "ocr"), default="health")
+    parser.add_argument(
+        "--component",
+        choices=("health", "model", "ocr", "sec", "database", "storage"),
+        default="health",
+    )
     args = parser.parse_args(argv)
     if args.component == "model":
         return _model_smoke()
     if args.component == "ocr":
         return _ocr_smoke()
+    if args.component == "sec":
+        return _sec_smoke()
+    if args.component == "database":
+        return _database_smoke()
+    if args.component == "storage":
+        return _storage_smoke()
     base = os.getenv("FINANCIAL_DISCLOSURE_BASE_URL", "").rstrip("/")
     if not base:
         print("BLOCKED: set FINANCIAL_DISCLOSURE_BASE_URL")
@@ -83,6 +94,84 @@ def _ocr_smoke() -> int:
         print("BLOCKED: FINANCIAL_DISCLOSURE_OCR_SAMPLE is not an accessible file")
         return 2
     return _run_ocr(input_path, generated=False)
+
+
+def _sec_smoke() -> int:
+    user_agent = os.getenv("FINANCIAL_SEC_USER_AGENT", "").strip()
+    if not user_agent:
+        print("BLOCKED: set FINANCIAL_SEC_USER_AGENT with a contactable identity")
+        return 2
+    cik = os.getenv("FINANCIAL_SEC_CIK", "0000320193").strip().zfill(10)
+    url = f"https://data.sec.gov/submissions/CIK{cik}.json"
+    request = urllib.request.Request(url, headers={"User-Agent": user_agent, "Accept": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            if response.status != 200:
+                print(f"FAILED: SEC EDGAR status={response.status}")
+                return 1
+            payload = json.loads(response.read().decode("utf-8"))
+        if not isinstance(payload.get("filings"), dict):
+            print("FAILED: SEC EDGAR response lacks filings")
+            return 1
+        print(f"PASSED: SEC EDGAR submissions fetched; cik={cik}")
+        return 0
+    except urllib.error.HTTPError as exc:
+        if exc.code in (403, 429, 503):
+            print(f"BLOCKED: SEC EDGAR access unavailable (HTTP {exc.code})")
+            return 2
+        print(f"FAILED: SEC EDGAR HTTP {exc.code}")
+        return 1
+    except urllib.error.URLError as exc:
+        print(f"BLOCKED: SEC EDGAR unavailable ({exc.reason})")
+        return 2
+    except (OSError, TypeError, ValueError) as exc:
+        print(f"FAILED: SEC EDGAR response ({exc.__class__.__name__})")
+        return 1
+
+
+def _database_smoke() -> int:
+    compose_file = os.getenv("FINANCIAL_COMPOSE_FILE", "compose.yaml")
+    postgres_service = os.getenv("FINANCIAL_POSTGRES_SERVICE", "postgres")
+    redis_service = os.getenv("FINANCIAL_REDIS_SERVICE", "redis")
+    postgres_user = os.getenv("FINANCIAL_POSTGRES_USER", "financial")
+    commands = (
+        ["docker", "compose", "-f", compose_file, "exec", "-T", postgres_service, "pg_isready", "-U", postgres_user],
+        ["docker", "compose", "-f", compose_file, "exec", "-T", redis_service, "redis-cli", "ping"],
+    )
+    try:
+        for command in commands:
+            result = subprocess.run(command, check=False, capture_output=True, text=True, timeout=30)
+            if result.returncode != 0:
+                print(f"FAILED: middleware command failed ({command[-2]})")
+                return 1
+    except FileNotFoundError:
+        print("BLOCKED: Docker CLI is unavailable")
+        return 2
+    except subprocess.SubprocessError as exc:
+        print(f"BLOCKED: middleware command unavailable ({exc.__class__.__name__})")
+        return 2
+    print("PASSED: PostgreSQL and Redis Compose clients")
+    return 0
+
+
+def _storage_smoke() -> int:
+    base = os.getenv("FINANCIAL_MINIO_URL", "http://127.0.0.1:9010").rstrip("/")
+    try:
+        with urllib.request.urlopen(f"{base}/minio/health/live", timeout=10) as response:
+            if response.status != 200:
+                print(f"FAILED: MinIO health status={response.status}")
+                return 1
+        print("PASSED: MinIO health")
+        return 0
+    except urllib.error.HTTPError as exc:
+        print(f"FAILED: MinIO HTTP {exc.code}")
+        return 1
+    except urllib.error.URLError as exc:
+        print(f"BLOCKED: MinIO unavailable ({exc.reason})")
+        return 2
+    except (OSError, ValueError) as exc:
+        print(f"FAILED: MinIO health ({exc.__class__.__name__})")
+        return 1
 
 
 def _run_ocr(input_path: Path, generated: bool) -> int:
