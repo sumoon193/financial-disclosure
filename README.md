@@ -59,6 +59,7 @@ src/test/java/                         Java API 与计算测试
 app/financial_disclosure/              Python 领域实现和适配器
 app/financial_disclosure/ocr/          OCR 与质量门禁
 app/financial_disclosure/persistence/  缓存、租约和审计持久化
+frontend/                              Vue 3、TypeScript、Vite 审计工作台
 scripts/financial_disclosure/           live smoke 与恢复演练
 migrations/                             Python 持久化迁移
 docker/Dockerfile                       Java 服务镜像
@@ -66,11 +67,11 @@ compose.yaml                            PostgreSQL、Redis、MinIO 和应用
 tests/                                  Python 单元、契约和集成测试
 ```
 
-当前仓库提供 API 和 Swagger UI，尚未实现独立业务前端。Swagger 只用于接口调试，不能等同于申报检索、文档阅读和运维页面已经完成。
+`frontend/` 提供独立业务控制台，覆盖审计总览、申报上传、核验复核和基础设施状态。Swagger UI 仍只用于接口调试，真实浏览器验收必须连接 Keycloak、Java 服务、PostgreSQL 和 MinIO。
 
 ## 环境要求
 
-- Docker Desktop，用于运行 PostgreSQL、Redis、MinIO 和 Java 服务。
+- Docker Desktop，用于运行 PostgreSQL、Redis、MinIO、Keycloak、Java 服务和前端。
 - Python 3.12，用于 Python 测试、OCR 和 live smoke。
 - 本机直接构建 Java 时需要 JDK 17 和 Maven 3.9；使用 Docker 时不需要本机 Maven。
 - OCR 需要 Tesseract 5；PDF OCR 还需要 Poppler 的 `pdftoppm`。
@@ -87,6 +88,7 @@ docker compose -f compose.yaml up -d --wait postgres redis minio
 构建并启动完整 Java 服务：
 
 ```bash
+export KEYCLOAK_ADMIN_PASSWORD='replace-with-a-local-password'
 docker compose -f compose.yaml --profile full up -d --build --wait
 ```
 
@@ -95,6 +97,8 @@ docker compose -f compose.yaml --profile full up -d --build --wait
 | 服务 | 地址 |
 | --- | --- |
 | API | http://127.0.0.1:8001 |
+| Web 控制台 | http://127.0.0.1:3101 |
+| Keycloak | http://127.0.0.1:8181 |
 | Actuator | http://127.0.0.1:8001/actuator/health |
 | PostgreSQL | `127.0.0.1:5433` |
 | Redis | `127.0.0.1:6380` |
@@ -150,6 +154,10 @@ Java 与 Python 服务不要占用同一端口。
 | `QWEN_API_KEY` | 空 | Qwen 密钥，不得提交 |
 | `QWEN_CHAT_MODEL` | `qwen-plus` | 文本模型 |
 | `FINANCIAL_DISCLOSURE_BASE_URL` | 空 | live smoke 的服务地址 |
+| `FINANCIAL_OIDC_ISSUER_URL` | 必填 | Keycloak Realm issuer |
+| `FINANCIAL_OIDC_JWKS_URL` | 必填 | 容器内 JWKS 地址 |
+| `FINANCIAL_OIDC_AUDIENCE` | `financial-web` | Access Token 受众 |
+| `KEYCLOAK_ADMIN_PASSWORD` | 必填 | 本地 Keycloak 管理密码，不得提交 |
 
 ## 主要 API
 
@@ -157,7 +165,15 @@ Java 与 Python 服务不要占用同一端口。
 | --- | --- | --- |
 | `GET` | `/health` | 基础健康检查 |
 | `POST` | `/api/filings` | 保存申报内容和版本 |
+| `POST` | `/api/filings/upload` | 上传二进制申报文件并写入 MinIO |
+| `GET` | `/api/filings` | 分页读取当前租户申报 |
+| `GET` | `/api/overview` | 审计总览 |
+| `GET` | `/api/verification-runs` | 分页读取核验运行 |
+| `GET` | `/api/verification-runs/{id}/timeline` | 读取审计时间线 |
+| `POST` | `/api/verification-runs/{id}/review-decisions` | 记录复核决定 |
 | `POST` | `/api/verification-runs` | 执行确定性数值核验 |
+
+除 `/health` 外，Java API 需要 Keycloak Bearer Token。浏览器使用 Authorization Code + PKCE S256；Access Token 只保存在内存中。
 
 ## 请求示例与返回结果
 
@@ -165,6 +181,7 @@ Java 与 Python 服务不要占用同一端口。
 
 ```bash
 curl -X POST http://127.0.0.1:8001/api/filings \
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
     "filingId": "filing-2026-001",
@@ -181,6 +198,7 @@ curl -X POST http://127.0.0.1:8001/api/filings \
 
 ```bash
 curl -X POST http://127.0.0.1:8001/api/verification-runs \
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
     "filingId": "filing-2026-001",
@@ -240,6 +258,16 @@ PowerShell 使用 `$env:变量名 = "值"` 设置相同环境变量。模型 smo
 
 退出码统一为：`0` 验证通过，`1` 已连接但断言失败，`2` 缺少服务、依赖或授权。当前脚本尚未覆盖 PostgreSQL、Redis、MinIO 和 SEC 的独立读写 smoke，因此这些集成不能仅凭容器健康状态标记通过。
 
+浏览器 E2E 需要在 `financial` Realm 创建具有 `financial-reviewer` 角色的本地用户：
+
+用户必须设置 `tenant_id` 属性；该属性会进入 Access Token，不能用浏览器请求头替代。
+
+```powershell
+$env:FINANCIAL_E2E_USERNAME = "本地测试用户名"
+$env:FINANCIAL_E2E_PASSWORD = "本地测试密码"
+npm --prefix frontend run test:e2e:live
+```
+
 ## OCR
 
 本地 OCR 不需要注册云服务：
@@ -272,7 +300,7 @@ pdftoppm -v
 - 财务数字只由 `BigDecimal`/`Decimal` 计算，模型不得生成或修正数值。
 - SEC 请求必须配置可联系的 User-Agent，并遵守来源限制。
 - OCR、模型、外部来源、数据库和对象存储需要分别验收。
-- 当前缺少完整业务前端、真实中间件独立 smoke、三轮评测、压测和故障恢复证据，不能标记为 deployment-ready。
+- 当前仍缺少真实中间件独立 smoke、三轮评测、压测和故障恢复证据，不能标记为 deployment-ready。
 
 ## License
 

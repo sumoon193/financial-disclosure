@@ -12,6 +12,9 @@ public class FilingEntity {
     @Id private String id;
 
     @Column(nullable = false)
+    private String tenantId;
+
+    @Column(nullable = false)
     private String filingId;
 
     @Column(nullable = false)
@@ -36,6 +39,7 @@ public class FilingEntity {
 
     public FilingEntity(
             String id,
+            String tenantId,
             String filingId,
             String formType,
             String sourceFormat,
@@ -44,6 +48,7 @@ public class FilingEntity {
             String objectKey,
             Instant createdAt) {
         this.id = id;
+        this.tenantId = tenantId;
         this.filingId = filingId;
         this.formType = formType;
         this.sourceFormat = sourceFormat;
@@ -61,11 +66,31 @@ public class FilingEntity {
         return filingId;
     }
 
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public String getSourceFormat() {
+        return sourceFormat;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
     public String getContentSha256() {
         return contentSha256;
     }
 
     public String getObjectKey() {
         return objectKey;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 }

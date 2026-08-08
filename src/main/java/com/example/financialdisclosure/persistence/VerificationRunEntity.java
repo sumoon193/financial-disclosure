@@ -13,6 +13,9 @@ public class VerificationRunEntity {
     @Id private String id;
 
     @Column(nullable = false)
+    private String tenantId;
+
+    @Column(nullable = false)
     private String filingId;
 
     @Column(nullable = false)
@@ -46,6 +49,7 @@ public class VerificationRunEntity {
 
     public VerificationRunEntity(
             String id,
+            String tenantId,
             String filingId,
             String factName,
             BigDecimal actualValue,
@@ -57,6 +61,7 @@ public class VerificationRunEntity {
             String citation,
             Instant createdAt) {
         this.id = id;
+        this.tenantId = tenantId;
         this.filingId = filingId;
         this.factName = factName;
         this.actualValue = actualValue;
@@ -72,4 +77,15 @@ public class VerificationRunEntity {
     public String getId() {
         return id;
     }
+
+    public String getFilingId() { return filingId; }
+    public String getFactName() { return factName; }
+    public BigDecimal getActualValue() { return actualValue; }
+    public BigDecimal getExpectedValue() { return expectedValue; }
+    public BigDecimal getDifference() { return difference; }
+    public BigDecimal getTolerance() { return tolerance; }
+    public String getUnit() { return unit; }
+    public String getStatus() { return status; }
+    public String getCitation() { return citation; }
+    public Instant getCreatedAt() { return createdAt; }
 }

@@ -5,4 +5,10 @@ __pycache__/
 .pytest_cache/
 *.pyc
 target/
+frontend/node_modules/
+frontend/dist/
+frontend/playwright-report/
+frontend/test-results/
+tests/.pytest-tmp/
+tests/pytest-of-sssy/
 build/

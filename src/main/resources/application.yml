@@ -16,6 +16,12 @@ spring:
     redis:
       host: ${REDIS_HOST:127.0.0.1}
       port: ${REDIS_PORT:6380}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${FINANCIAL_OIDC_ISSUER_URL}
+          jwk-set-uri: ${FINANCIAL_OIDC_JWKS_URL}
 
 management:
   endpoints:
@@ -24,6 +30,8 @@ management:
         include: health,info
 
 financial:
+  security:
+    audience: ${FINANCIAL_OIDC_AUDIENCE:financial-web}
   storage:
     endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9010}
     access-key: ${MINIO_ACCESS_KEY:minioadmin}
