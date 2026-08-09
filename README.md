@@ -345,12 +345,24 @@ SEC smoke 必须设置 FINANCIAL_SEC_USER_AGENT；模型 smoke 必须设置 QWEN
 
 ~~~powershell
 $sha = (git rev-parse HEAD).Trim()
-python .\scripts\financial_disclosure\production_readiness.py --evidence .\reports\production-v2\evidence.json --expected-commit $sha
+$centralRoot = "D:\Code\agent study" # change to your central governance checkout
+python (Join-Path $centralRoot "governance\project_status.py") financial-disclosure (Join-Path $centralRoot "reports\financial-disclosure\production-v2\evidence.json") --expected-commit $sha
 ~~~
 
 ## Quantitative baseline and evidence
 
-The current acceptance branch has a reproducible record in the central governance repository: `reports/financial-disclosure/production-v2/quantitative-summary.json`. The local `/actuator/health` probe used 100 samples at concurrency 4: 100% success, P50 8.16 ms, P95 15.75 ms and P99 404.25 ms. The P99 tail is retained instead of being hidden by an average. Python regression recorded 144 passed and Maven recorded 10 tests with zero failures; PostgreSQL, Redis, MinIO, Tesseract OCR and restart recovery passed locally. SEC EDGAR, Qwen, authenticated browser flows, three-round real evaluation and public stability remain `blocked`. These numbers are not production capacity or public SLA claims.
+The current acceptance branch has a reproducible record in the central governance repository: `reports/financial-disclosure/production-v2/quantitative-summary.json`. The `/actuator/health` probe is retained only as a local smoke baseline and is explicitly `resume_eligible: false`; it must not be presented as business QPS, capacity, or performance improvement. Python regression recorded 144 passed and Maven recorded 10 tests with zero failures; PostgreSQL, Redis, MinIO, Tesseract OCR and restart recovery passed locally. SEC EDGAR, Qwen, authenticated browser flows, three-round real evaluation, authenticated business-load measurement and public stability remain `blocked`.
+
+## Windows PowerShell canonical commands
+
+Run these from the repository root. IntelliJ IDEA can run the Java process after importing `pom.xml`; Compose still owns PostgreSQL, Redis, MinIO and Keycloak.
+
+```powershell
+$env:KEYCLOAK_ADMIN_PASSWORD = Read-Host "Keycloak local password"
+docker compose -f compose.yaml --profile full up -d --build --wait
+Invoke-WebRequest http://127.0.0.1:8001/actuator/health
+docker compose -f compose.yaml --profile full down
+```
 
 ## License
 
