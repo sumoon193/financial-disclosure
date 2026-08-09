@@ -348,6 +348,10 @@ $sha = (git rev-parse HEAD).Trim()
 python .\scripts\financial_disclosure\production_readiness.py --evidence .\reports\production-v2\evidence.json --expected-commit $sha
 ~~~
 
+## Quantitative baseline and evidence
+
+The current acceptance branch has a reproducible record in the central governance repository: `reports/financial-disclosure/production-v2/quantitative-summary.json`. The local `/actuator/health` probe used 100 samples at concurrency 4: 100% success, P50 8.16 ms, P95 15.75 ms and P99 404.25 ms. The P99 tail is retained instead of being hidden by an average. Python regression recorded 144 passed and Maven recorded 10 tests with zero failures; PostgreSQL, Redis, MinIO, Tesseract OCR and restart recovery passed locally. SEC EDGAR, Qwen, authenticated browser flows, three-round real evaluation and public stability remain `blocked`. These numbers are not production capacity or public SLA claims.
+
 ## License
 
 MIT，详见 [LICENSE](LICENSE)。
