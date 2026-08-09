@@ -312,7 +312,8 @@ pdftoppm -v
 
 ## 生产验收与 IDEA 启动
 
-当前验收分支绑定 commit dae9ad0c7d329e75c025f1598def559937d49f12。查看完整门禁命令：
+验收命令必须从被测试的 checkout 运行。先用 `$sha = (git rev-parse HEAD).Trim()` 记录当前 40 位 SHA；
+中央治理只接受所有证据均绑定该 SHA 的结果。再查看完整门禁命令：
 
 ~~~powershell
 python .\scripts\financial_disclosure\production_readiness.py --describe
