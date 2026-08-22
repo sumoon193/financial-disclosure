@@ -345,7 +345,7 @@ SEC smoke 必须设置 FINANCIAL_SEC_USER_AGENT；模型 smoke 必须设置 QWEN
 
 ~~~powershell
 $sha = (git rev-parse HEAD).Trim()
-$centralRoot = "D:\Code\agent study" # change to your central governance checkout
+$centralRoot = Read-Host "Central governance checkout path"
 python (Join-Path $centralRoot "governance\project_status.py") financial-disclosure (Join-Path $centralRoot "reports\financial-disclosure\production-v2\evidence.json") --expected-commit $sha
 ~~~
 
