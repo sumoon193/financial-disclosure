@@ -79,11 +79,12 @@ def create_app(*, store: PersistenceStore | None = None) -> FastAPI:
             "tolerance": body.tolerance,
             "citation": body.citation,
         }
-        persistence._conn.execute(
-            "INSERT INTO verification_run(run_id, filing_id, status, result) VALUES (?,?,?,?)",
-            (run_id, body.citation.get("filing_id", ""), "accepted", str(result)),
+        persistence.record_verification_run(
+            run_id,
+            body.citation.get("filing_id", ""),
+            "accepted",
+            result,
         )
-        persistence._conn.commit()
         return VerificationRunResponse(run_id=run_id, status="accepted", result=result)
 
     return app

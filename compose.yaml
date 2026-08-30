@@ -1,0 +1,114 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?set KEYCLOAK_ADMIN_PASSWORD}
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8181:8080"
+    volumes:
+      - ./docker/keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\n\\r\\n' >&3 && grep -q '200' <&3"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: financial_disclosure
+      POSTGRES_USER: financial
+      POSTGRES_PASSWORD: financial_local
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U financial -d financial_disclosure"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - financial-postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - financial-redis-data:/data
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "${FINANCIAL_MINIO_API_PORT:-9010}:9000"
+      - "${FINANCIAL_MINIO_CONSOLE_PORT:-9011}:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - financial-minio-data:/data
+
+  app:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/financial_disclosure
+      POSTGRES_USER: financial
+      POSTGRES_PASSWORD: financial_local
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      FINANCIAL_AGENT_ENABLED: ${FINANCIAL_AGENT_ENABLED:-false}
+      QWEN_API_KEY: ${QWEN_API_KEY:-}
+      QWEN_CHAT_MODEL: ${QWEN_CHAT_MODEL:-qwen-plus}
+      FINANCIAL_SEC_USER_AGENT: ${FINANCIAL_SEC_USER_AGENT:-}
+      FINANCIAL_OIDC_ISSUER_URL: http://localhost:8181/realms/financial
+      FINANCIAL_OIDC_JWKS_URL: http://keycloak:8080/realms/financial/protocol/openid-connect/certs
+      FINANCIAL_OIDC_AUDIENCE: financial-web
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+
+  frontend:
+    profiles: ["full"]
+    build:
+      context: ./frontend
+      args:
+        VITE_KEYCLOAK_URL: http://localhost:8181
+        VITE_KEYCLOAK_REALM: financial
+        VITE_KEYCLOAK_CLIENT_ID: financial-web
+    ports:
+      - "3101:80"
+    depends_on:
+      app:
+        condition: service_started
+
+volumes:
+  financial-postgres-data:
+  financial-redis-data:
+  financial-minio-data:
